@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace TLibTest
@@ -65,15 +67,9 @@ namespace TLibTest
     public class Serializer
     {
         /// <summary>
-        /// 属性名
+        /// 变量字典,&lt;变量名,变量值&gt;
         /// </summary>
-        public List<string> LstVarName { get; set; }
-        /// <summary>
-        /// 属性值
-        /// </summary>
-        public List<object> LstOldValue { get; set; }
-        public Dictionary<string, object> Variable { get; set; } = new Dictionary<string, object>();
-
+        public SerializableDictionary<string, object> Variables { get; set; }
         /// <summary>
         /// 引用,exp:MainWindow
         /// </summary>
@@ -92,8 +88,6 @@ namespace TLibTest
         {
             this.file_XML = file_XML;
             this.reference = reference;
-            LstVarName = lstVarName;
-            LstOldValue = new List<object>();
             Load();
             DispatcherTimer timer = new DispatcherTimer
             {
@@ -103,29 +97,39 @@ namespace TLibTest
             timer.Tick += (s, e) =>
             {
                 Type type = reference.GetType();
-                for (int i = 0; i < LstVarName.Count; i++)
+                if (!File.Exists(file_XML))
                 {
-                    PropertyInfo pi = type.GetProperty(LstVarName[i]);
-                    object value = pi.GetValue(reference, null);
-                    if (LstOldValue.Count < i + 1)
+                    Variables = new SerializableDictionary<string, object>();
+                    foreach (var item in lstVarName)
                     {
-                        LstOldValue.Add(value);
+                        PropertyInfo pi = type.GetProperty(item);
+                        object value = pi.GetValue(reference, null);
+                        Variables.Add(item, value);
                     }
-                    else
+                }
+                else
+                {
+                    for (int i = 0; i < Variables.Count; i++)
                     {
-                        if (!LstOldValue[i].Equals(value))
+                        PropertyInfo pi = type.GetProperty(Variables.ElementAt(i).Key);
+                        object value = pi.GetValue(reference, null);
+
+                        if (!Variables.ElementAt(i).Value.Equals(value))
                         {
-                            LstOldValue[i] = value;
+                            Variables[Variables.ElementAt(i).Key] = value;
                             Save();
                             //Console.WriteLine($"Change!value={value}");
                         }
                         else
                         {
-                            LstOldValue[i] = value;
+                            Variables[Variables.ElementAt(i).Key] = value;
                         }
-
                     }
                 }
+                Save();
+
+
+
 
             };
         }
@@ -137,8 +141,8 @@ namespace TLibTest
             using (FileStream fs = new FileStream(file_XML, FileMode.Create, FileAccess.Write))
             {
                 //在进行XML序列化的时候，在类中一定要有无参数的构造方法(要使用typeof获得对象类型)
-                XmlSerializer xml = new XmlSerializer(typeof(List<object>));
-                xml.Serialize(fs, LstOldValue);
+                XmlSerializer xml = new XmlSerializer(typeof(SerializableDictionary<string, object>));
+                xml.Serialize(fs, Variables);
             }
         }
         /// <summary>
@@ -152,16 +156,66 @@ namespace TLibTest
             }
             using (FileStream fs = new FileStream(file_XML, FileMode.Open, FileAccess.Read))
             {
-                XmlSerializer xml = new XmlSerializer(typeof(List<object>));
-                LstOldValue = (List<object>)xml.Deserialize(fs);
+                XmlSerializer xml = new XmlSerializer(typeof(SerializableDictionary<string, object>));
+                Variables = (SerializableDictionary<string, object>)xml.Deserialize(fs);
             }
-            for (int i = 0; i < LstVarName.Count; i++)
+            foreach (var item in Variables)
             {
                 Type type = reference.GetType();
-                PropertyInfo pi = type.GetProperty(LstVarName[i]);
+                PropertyInfo pi = type.GetProperty(item.Key);
                 object value = pi.GetValue(reference, null);
-                pi.SetValue(reference, LstOldValue[i]);
+                pi.SetValue(reference, item.Value);
             }
         }
     }
+
+    [Serializable]
+    public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
+    {
+        public SerializableDictionary() { }
+        public void WriteXml(XmlWriter write)       // Serializer
+        {
+            XmlSerializer KeySerializer = new XmlSerializer(typeof(TKey));
+            XmlSerializer ValueSerializer = new XmlSerializer(typeof(TValue));
+
+            foreach (KeyValuePair<TKey, TValue> kv in this)
+            {
+                write.WriteStartElement("SerializableDictionary");
+                write.WriteStartElement("key");
+                KeySerializer.Serialize(write, kv.Key);
+                write.WriteEndElement();
+                write.WriteStartElement("value");
+                ValueSerializer.Serialize(write, kv.Value);
+                write.WriteEndElement();
+                write.WriteEndElement();
+            }
+        }
+        public void ReadXml(XmlReader reader)       // Deserializer
+        {
+            reader.Read();
+            XmlSerializer KeySerializer = new XmlSerializer(typeof(TKey));
+            XmlSerializer ValueSerializer = new XmlSerializer(typeof(TValue));
+
+            while (reader.NodeType != XmlNodeType.EndElement)
+            {
+                reader.ReadStartElement("SerializableDictionary");
+                reader.ReadStartElement("key");
+                TKey tk = (TKey)KeySerializer.Deserialize(reader);
+                reader.ReadEndElement();
+                reader.ReadStartElement("value");
+                TValue vl = (TValue)ValueSerializer.Deserialize(reader);
+                reader.ReadEndElement();
+                reader.ReadEndElement();
+                this.Add(tk, vl);
+                reader.MoveToContent();
+            }
+            reader.ReadEndElement();
+
+        }
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+    }
+
 }
