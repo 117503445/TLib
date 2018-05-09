@@ -59,18 +59,35 @@ namespace TLibTest
 
         }
     }
+    /// <summary>
+    /// 无污染无公害的序列化器
+    /// </summary>
     public class Serializer
     {
+        /// <summary>
+        /// 属性名
+        /// </summary>
         public List<string> LstVarName { get; set; }
+        /// <summary>
+        /// 属性值
+        /// </summary>
         public List<object> LstOldValue { get; set; }
+        public Dictionary<string, object> Variable { get; set; } = new Dictionary<string, object>();
+
+        /// <summary>
+        /// 引用,exp:MainWindow
+        /// </summary>
         private readonly object reference;
+        /// <summary>
+        /// XML文件路径
+        /// </summary>
         private readonly string file_XML = string.Empty;
         /// <summary>
-        /// 
+        /// 创建序列化器,并通过Load方法加载已保存的值
         /// </summary>
-        /// <param name="reference"></param>
-        /// <param name="file_XML"></param>
-        /// <param name="lstVarName"></param>
+        /// <param name="reference">填写this以传递引用</param>
+        /// <param name="file_XML">XML文件路径</param>
+        /// <param name="lstVarName">属性列表</param>
         public Serializer(object reference, string file_XML, List<string> lstVarName)
         {
             this.file_XML = file_XML;
@@ -129,6 +146,10 @@ namespace TLibTest
         /// </summary>
         public void Load()
         {
+            if (!File.Exists(file_XML))
+            {
+                return;
+            }
             using (FileStream fs = new FileStream(file_XML, FileMode.Open, FileAccess.Read))
             {
                 XmlSerializer xml = new XmlSerializer(typeof(List<object>));
