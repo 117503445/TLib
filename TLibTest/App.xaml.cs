@@ -13,12 +13,9 @@ namespace TLibTest
     /// </summary>
     public partial class App : Application
     {
-        public int Var_int { get; set; } = 2;
-        public string Var_string { get; set; } = "Hello";
-
+ 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            Serializer serializer = new Serializer(this, "App.xml", new List<string>() { nameof(Var_int), nameof(Var_string) });
         }
     }
 }
