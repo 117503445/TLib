@@ -56,7 +56,7 @@ namespace TLib
             wd.Show();
             while (wd.Result == -1)
             {
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromMilliseconds(200));
             }
             wd.Close();
             return wd.Result;

@@ -60,7 +60,7 @@ namespace TLibTest
 
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
-
+            Console.WriteLine(Logger.xml);
         }
     }
 
