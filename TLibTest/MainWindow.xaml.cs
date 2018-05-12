@@ -60,7 +60,15 @@ namespace TLibTest
 
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(Logger.xml);
+            try
+            {
+                int[] a = new int[9];
+                a[9] = 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteException(ex);
+            }
         }
     }
 

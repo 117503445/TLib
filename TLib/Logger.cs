@@ -10,7 +10,8 @@ namespace TLib
 {
     public static class Logger
     {
-        public static string File_Log { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "File/Logger.xml";
+        public static string Dir_Log { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "File\\";
+        public static string File_Log { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "File\\Logger.xml";
         private static XDocument GetXMLFromDisk()
         {
 
@@ -24,18 +25,20 @@ namespace TLib
                 {
                     File.Move(File_Log, File_Log + ".damage" + new Random().Next());
                 }
-                return new XDocument();
+                return new XDocument(new XElement("Expections"));
             }
 
         }
         public static void WriteException(Exception e)
         {
             XDocument xml = GetXMLFromDisk();
-            xml.Root.Add(new XElement(
-
-                "ex"));
-            xml.Save(File_Log);
+            xml.Root.Add(new XElement("ex", new XElement("time", DateTime.Now.ToLocalTime().ToString()), new XElement("Message", e.Message), new XElement("Data", e.Data), new XElement("Source", e.Source), new XElement("StackTrace", e.StackTrace), new XElement("TargetSite", e.TargetSite), new XElement("HResult", e.HResult), new XElement("HelpLink", e.HelpLink)));
+            SaveXML(xml);
         }
         public static void Write() { }
+        private static void SaveXML(XDocument xml) {
+            Directory.CreateDirectory(Dir_Log);
+            xml.Save(File_Log);
+        }
     }
 }
