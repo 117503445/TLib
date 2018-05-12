@@ -45,9 +45,9 @@ namespace TLib
         {
             try
             {
-                Logger.WriteException(e.Exception, false, "试图恢复UI异常");
-                ExpectionCatched(null, e.Exception);
+                Logger.WriteException(e.Exception, false, "试图恢复UI异常");   
                 e.Handled = true;
+                ExpectionCatched(null, e.Exception);
             }
             catch (Exception)
             {

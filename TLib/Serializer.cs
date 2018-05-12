@@ -28,6 +28,8 @@ namespace TLib
         /// XML文件路径
         /// </summary>
         private readonly string file_XML = string.Empty;
+
+        private List<string> lstVarName;
         /// <summary>
         /// 创建序列化器,并通过Load方法加载已保存的值
         /// </summary>
@@ -38,7 +40,21 @@ namespace TLib
         {
             this.file_XML = file_XML;
             this.reference = reference;
+            this.lstVarName = lstVarName;
             Load();
+            foreach (var item in lstVarName)//字段列表增加时,添加纪录到字典
+            {
+                try
+                {
+                    PropertyInfo pi = reference.GetType().GetProperty(item);
+                    object value = pi.GetValue(reference, null);
+                    Variables.Add(item, value);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
             System.Timers.Timer timer = new System.Timers.Timer
             {
                 Enabled = true,
@@ -108,6 +124,14 @@ namespace TLib
             {
                 XmlSerializer xml = new XmlSerializer(typeof(SerializableDictionary<string, object>));
                 Variables = (SerializableDictionary<string, object>)xml.Deserialize(fs);
+            }
+
+            for (int i = Variables.Count - 1; i >= 0; i--)//字段列表减少时,移除字典纪录
+            {
+                if (!lstVarName.Contains(Variables.ElementAt(i).Key))
+                {
+                    Variables.Remove(Variables.ElementAt(i).Key);
+                }
             }
             foreach (var item in Variables)
             {

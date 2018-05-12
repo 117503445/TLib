@@ -30,6 +30,7 @@ namespace TLibTest
         public MainWindow()
         {
             InitializeComponent();
+            //,nameof(Var_bool)
             Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_int), nameof(Var_string) });
             //serializer.LstVarName.AddRange(new string[] { nameof(Var_int), nameof(Var_string) });
             //serializer.Add(ref var_int);
@@ -39,17 +40,19 @@ namespace TLibTest
 
         public static int Var_int { get; set; } = 2;
         public static string Var_string { get; set; } = "Hello";
-
+        public static bool Var_bool { get; set; } = false;
         private void BtnDebug0_Click(object sender, RoutedEventArgs e)
         {
             Var_int += 1;
             Var_string = $"Hello:{DateTime.Now}";
+            Var_bool = !Var_bool;
         }
 
         private void BtnDebug1_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine(Var_int);
             Console.WriteLine(Var_string);
+            Console.WriteLine(Var_bool);
         }
 
         private async void BtnDebug2_Click(object sender, RoutedEventArgs e)
