@@ -60,7 +60,7 @@ namespace TLibTest
 
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Write("233");
+            throw new Exception("233");
         }
     }
 

@@ -6,11 +6,11 @@
       xmlns:local="clr-namespace:TLib"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="PgMessageDefault">
+      Title="PgMessageDefault" FontSize="20">
 
     <Grid>
-        <Viewbox>
-            <TextBlock Name="TxtMain" HorizontalAlignment="Center" VerticalAlignment="Center" >消息</TextBlock>
-        </Viewbox>
+ 
+            <TextBlock Name="TxtMain" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" >消息</TextBlock>
+ 
     </Grid>
 </Page>

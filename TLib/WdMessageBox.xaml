@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TLib"
         mc:Ignorable="d"
-        Title="消息" Height="200" Width="300" ResizeMode="NoResize">
+        Title="消息" Height="200" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

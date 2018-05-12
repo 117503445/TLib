@@ -1,4 +1,5 @@
 ﻿using System;
+using TLib;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -16,6 +17,7 @@ namespace TLibTest
  
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            WPF_ExpectionHandler.HandleExpection(Current,AppDomain.CurrentDomain);
         }
     }
 }

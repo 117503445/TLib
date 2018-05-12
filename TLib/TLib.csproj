@@ -56,6 +56,7 @@
     <Compile Include="WdMessageBox.xaml.cs">
       <DependentUpon>WdMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF_ExpectionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="PgMessageDefault.xaml">
