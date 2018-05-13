@@ -19,7 +19,7 @@ namespace TLib
         /// <summary>
         /// 变量字典,&lt;变量名,变量值&gt;
         /// </summary>
-        public SerializableDictionary<string, object> Variables { get; set; }
+        private SerializableDictionary<string, object> Variables { get; set; }
         /// <summary>
         /// 引用,exp:MainWindow
         /// </summary>
@@ -102,7 +102,7 @@ namespace TLib
         /// <summary>
         /// 保存至XML文件
         /// </summary>
-        public void Save()
+        private void Save()
         {
             using (FileStream fs = new FileStream(file_XML, FileMode.Create, FileAccess.Write))
             {
@@ -114,7 +114,7 @@ namespace TLib
         /// <summary>
         /// 从XML文件读取
         /// </summary>
-        public void Load()
+        private void Load()
         {
             if (!File.Exists(file_XML))
             {
