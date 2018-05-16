@@ -16,6 +16,10 @@ namespace TLib
     /// </summary>
     public class Serializer
     {
+        ~Serializer()
+        {
+            Save();
+        }
         /// <summary>
         /// 变量字典,&lt;变量名,变量值&gt;
         /// </summary>
@@ -99,11 +103,14 @@ namespace TLib
 
             };
         }
+
+
         /// <summary>
         /// 保存至XML文件
         /// </summary>
         private void Save()
         {
+            Console.WriteLine($"save {DateTime.Now}");
             using (FileStream fs = new FileStream(file_XML, FileMode.Create, FileAccess.Write))
             {
                 //在进行XML序列化的时候，在类中一定要有无参数的构造方法(要使用typeof获得对象类型)
@@ -116,6 +123,7 @@ namespace TLib
         /// </summary>
         private void Load()
         {
+            Console.WriteLine("Load");
             if (!File.Exists(file_XML))
             {
                 return;
@@ -153,14 +161,33 @@ namespace TLib
 
             foreach (KeyValuePair<TKey, TValue> kv in this)
             {
+                Console.Write(0);
                 write.WriteStartElement("SerializableDictionary");
+                Console.Write(1);
                 write.WriteStartElement("key");
+                Console.Write(2);
                 KeySerializer.Serialize(write, kv.Key);
+                Console.Write(3);
+
                 write.WriteEndElement();
+                Console.Write(4);
                 write.WriteStartElement("value");
-                ValueSerializer.Serialize(write, kv.Value);
+                Console.Write(5);
+                try
+                {
+                    ValueSerializer.Serialize(write, kv.Value);
+                }
+                catch (Exception)
+                {
+
+                 
+                }
+                
+                Console.Write(6);
                 write.WriteEndElement();
+                Console.Write(7);
                 write.WriteEndElement();
+                Console.Write(8);
             }
         }
         public void ReadXml(XmlReader reader)       // Deserializer
@@ -179,7 +206,7 @@ namespace TLib
                 TValue vl = (TValue)ValueSerializer.Deserialize(reader);
                 reader.ReadEndElement();
                 reader.ReadEndElement();
-                this.Add(tk, vl);
+                Add(tk, vl);
                 reader.MoveToContent();
             }
             reader.ReadEndElement();
@@ -188,6 +215,25 @@ namespace TLib
         public XmlSchema GetSchema()
         {
             return null;
+        }
+    }
+    [Serializable]
+    public class SerializableList<T> : List<T>, IXmlSerializable
+    {
+        public SerializableList() { }
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

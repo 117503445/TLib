@@ -30,8 +30,11 @@ namespace TLibTest
         public MainWindow()
         {
             InitializeComponent();
-            //,nameof(Var_bool)
-            Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_int), nameof(Var_string) });
+
+            SerializableList<int> list = new SerializableList<int>() { 1, 2, 3 };
+
+            Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_bool), nameof(D) });
+
             //serializer.LstVarName.AddRange(new string[] { nameof(Var_int), nameof(Var_string) });
             //serializer.Add(ref var_int);
             //serializer.List.Add(ref var_int);
@@ -41,18 +44,32 @@ namespace TLibTest
         public static int Var_int { get; set; } = 2;
         public static string Var_string { get; set; } = "Hello";
         public static bool Var_bool { get; set; } = false;
+        public static List<int> Var_list_int { get; set; } = new List<int> { 2, 3, 4, 5 };
+        public static SerializableDictionary<string, int> D { get; set; } = new SerializableDictionary<string, int>()
+        {
+            { "0",2}
+            ,{ "1",4}
+        };
         private void BtnDebug0_Click(object sender, RoutedEventArgs e)
         {
             Var_int += 1;
             Var_string = $"Hello:{DateTime.Now}";
             Var_bool = !Var_bool;
+            for (int i = 0; i < Var_list_int.Count; i++)
+            {
+                Var_list_int[i] += 1;
+            }
         }
 
         private void BtnDebug1_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(Var_int);
-            Console.WriteLine(Var_string);
-            Console.WriteLine(Var_bool);
+            //Console.WriteLine(Var_int);
+            //Console.WriteLine(Var_string);
+            //Console.WriteLine(Var_bool);
+            Var_list_int.ForEach((item) =>
+            {
+                Console.WriteLine(item);
+            });
         }
 
         private async void BtnDebug2_Click(object sender, RoutedEventArgs e)
