@@ -161,18 +161,18 @@ namespace TLib
 
             foreach (KeyValuePair<TKey, TValue> kv in this)
             {
-                Console.Write(0);
+            
                 write.WriteStartElement("SerializableDictionary");
-                Console.Write(1);
+            
                 write.WriteStartElement("key");
-                Console.Write(2);
+                
                 KeySerializer.Serialize(write, kv.Key);
-                Console.Write(3);
+                
 
                 write.WriteEndElement();
-                Console.Write(4);
+                
                 write.WriteStartElement("value");
-                Console.Write(5);
+                
                 try
                 {
                     ValueSerializer.Serialize(write, kv.Value);
@@ -183,11 +183,11 @@ namespace TLib
                  
                 }
                 
-                Console.Write(6);
+                
                 write.WriteEndElement();
-                Console.Write(7);
+                
                 write.WriteEndElement();
-                Console.Write(8);
+                
             }
         }
         public void ReadXml(XmlReader reader)       // Deserializer
