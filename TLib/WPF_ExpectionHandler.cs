@@ -30,7 +30,7 @@ namespace TLib
                 if (e.ExceptionObject is Exception exception)
                 {
                     Logger.WriteException(exception, false, "试图恢复非UI异常");
-                   // ExpectionCatched(null, exception);
+                    ExpectionCatched?.Invoke(null, exception);
                 }
 
             }
@@ -45,9 +45,9 @@ namespace TLib
         {
             try
             {
-                Logger.WriteException(e.Exception, false, "试图恢复UI异常");   
+                Logger.WriteException(e.Exception, false, "试图恢复UI异常");
                 e.Handled = true;
-               // ExpectionCatched(null, e.Exception);
+                ExpectionCatched?.Invoke(null, e.Exception);
             }
             catch (Exception)
             {

@@ -42,6 +42,18 @@ namespace TLib
         /// <param name="lstVarName">属性列表</param>
         public Serializer(object reference, string file_XML, List<string> lstVarName)
         {
+            //Variables.TGet += (s) =>{
+            //    Console.WriteLine();
+            //    foreach (var item in types)
+            //    {
+            //        Console.WriteLine(s);
+            //        if (item.ToString().Equals(s))
+            //        {
+            //            return item;
+            //        }
+            //    }
+            //    return null;
+            //};
             this.file_XML = file_XML;
             this.reference = reference;
             this.lstVarName = lstVarName;
@@ -144,9 +156,15 @@ namespace TLib
             }
         }
     }
+    /// <summary>
+    /// 序列化的字典,支持集合序列化
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     [Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
     {
+
         public SerializableDictionary() { }
         public void WriteXml(XmlWriter write)
         {
@@ -156,7 +174,7 @@ namespace TLib
                 write.WriteStartElement("key");
                 XmlSerializer KeySerializer = new XmlSerializer(kv.Key.GetType());
                 write.WriteStartAttribute("type");
-                write.WriteValue(kv.Key.GetType().ToString());
+                write.WriteValue(kv.Key.GetType().FullName);
                 KeySerializer.Serialize(write, kv.Key);
                 write.WriteEndElement();
                 write.WriteStartElement("value");
@@ -181,7 +199,42 @@ namespace TLib
                 TKey tk = (TKey)KeySerializer.Deserialize(reader);
                 reader.ReadEndElement();
                 string str_type_value = reader.GetAttribute(0);
-                var type_value = Type.GetType(str_type_value, true);
+
+                Type type_value = typeof(object);
+                bool isSuccess = false;
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    try
+                    {
+                        type_value = assembly.GetType(str_type_value, true);
+                        isSuccess = true;
+                    }
+                    catch (Exception)
+                    {
+
+
+                    }
+                }
+                if (!isSuccess)
+                {
+                    if (str_type_value.Contains("System.Collections.Generic.List`1"))
+                    {
+                        string inner_str = str_type_value.Substring(34, str_type_value.Length - 35);
+                        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            try
+                            {
+                                type_value = assembly.GetType(inner_str, true);
+                            }
+                            catch (Exception)
+                            {
+
+
+                            }
+                        }
+                        type_value = CreateGeneric(typeof(List<>), type_value);
+                    }
+                }
                 reader.ReadStartElement("value");
                 XmlSerializer ValueSerializer = new XmlSerializer(type_value);
                 TValue vl = (TValue)ValueSerializer.Deserialize(reader);
@@ -196,5 +249,11 @@ namespace TLib
         {
             return null;
         }
+        public static Type CreateGeneric(Type generic, Type innerType, params object[] args)
+        {
+            Type specificType = generic.MakeGenericType(new System.Type[] { innerType });
+            return specificType;
+        }
     }
+
 }
