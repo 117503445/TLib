@@ -97,14 +97,8 @@ namespace TLib
                     }
                 }
                 Save();
-
-
-
-
             };
         }
-
-
         /// <summary>
         /// 保存至XML文件
         /// </summary>
@@ -201,25 +195,6 @@ namespace TLib
         public XmlSchema GetSchema()
         {
             return null;
-        }
-    }
-    [Serializable]
-    public class SerializableList<T> : List<T>, IXmlSerializable
-    {
-        public SerializableList() { }
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            throw new NotImplementedException();
         }
     }
 }
