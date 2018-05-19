@@ -68,39 +68,6 @@ namespace TLib
             {
                 Save();
                 return;
-                Type type = reference.GetType();
-                if (!File.Exists(file_XML))
-                {
-                    Variables = new SerializableDictionary<string, object>();
-                    foreach (var item in lstVarName)
-                    {
-                        PropertyInfo pi = type.GetProperty(item);
-                        object value = pi.GetValue(reference, null);
-                        Variables.Add(item, value);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < Variables.Count; i++)
-                    {
-                        PropertyInfo pi = type.GetProperty(Variables.ElementAt(i).Key);
-                        object value = pi.GetValue(reference, null);
-
-                        if (Variables.ElementAt(i).Value!=(value))
-                        {
-                            //Variables[Variables.ElementAt(i).Key] = value;
-                            Save();
-                            Console.WriteLine(3);
-                            //Console.WriteLine($"Change!value={value}");
-                        }
-                        else
-                        {
-                            Console.WriteLine(2);
-                            //Variables[Variables.ElementAt(i).Key] = value;
-                        }
-                    }
-                }
-                
             };
         }
         /// <summary>
@@ -109,17 +76,12 @@ namespace TLib
         private void Save()
         {
             Console.WriteLine($"save {DateTime.Now}");
-
             for (int i = 0; i < Variables.Count; i++)
             {
                 PropertyInfo pi = reference.GetType().GetProperty(Variables.ElementAt(i).Key);
                 object value = pi.GetValue(reference, null);
                 Variables[Variables.ElementAt(i).Key] = value;
             }
-
-
-
-
             using (FileStream fs = new FileStream(file_XML, FileMode.Create, FileAccess.Write))
             {
                 //在进行XML序列化的时候，在类中一定要有无参数的构造方法(要使用typeof获得对象类型)
