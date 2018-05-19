@@ -18,7 +18,7 @@ namespace TLib
     {
         ~Serializer()
         {
-            Save();
+           Save();
         }
         /// <summary>
         /// 变量字典,&lt;变量名,变量值&gt;
@@ -42,18 +42,6 @@ namespace TLib
         /// <param name="lstVarName">属性列表</param>
         public Serializer(object reference, string file_XML, List<string> lstVarName)
         {
-            //Variables.TGet += (s) =>{
-            //    Console.WriteLine();
-            //    foreach (var item in types)
-            //    {
-            //        Console.WriteLine(s);
-            //        if (item.ToString().Equals(s))
-            //        {
-            //            return item;
-            //        }
-            //    }
-            //    return null;
-            //};
             this.file_XML = file_XML;
             this.reference = reference;
             this.lstVarName = lstVarName;
@@ -78,6 +66,8 @@ namespace TLib
             };
             timer.Elapsed += (s, e) =>
             {
+                Save();
+                return;
                 Type type = reference.GetType();
                 if (!File.Exists(file_XML))
                 {
@@ -96,19 +86,21 @@ namespace TLib
                         PropertyInfo pi = type.GetProperty(Variables.ElementAt(i).Key);
                         object value = pi.GetValue(reference, null);
 
-                        if (!Variables.ElementAt(i).Value.Equals(value))
+                        if (Variables.ElementAt(i).Value!=(value))
                         {
-                            Variables[Variables.ElementAt(i).Key] = value;
+                            //Variables[Variables.ElementAt(i).Key] = value;
                             Save();
+                            Console.WriteLine(3);
                             //Console.WriteLine($"Change!value={value}");
                         }
                         else
                         {
-                            Variables[Variables.ElementAt(i).Key] = value;
+                            Console.WriteLine(2);
+                            //Variables[Variables.ElementAt(i).Key] = value;
                         }
                     }
                 }
-                Save();
+                
             };
         }
         /// <summary>
@@ -117,6 +109,17 @@ namespace TLib
         private void Save()
         {
             Console.WriteLine($"save {DateTime.Now}");
+
+            for (int i = 0; i < Variables.Count; i++)
+            {
+                PropertyInfo pi = reference.GetType().GetProperty(Variables.ElementAt(i).Key);
+                object value = pi.GetValue(reference, null);
+                Variables[Variables.ElementAt(i).Key] = value;
+            }
+
+
+
+
             using (FileStream fs = new FileStream(file_XML, FileMode.Create, FileAccess.Write))
             {
                 //在进行XML序列化的时候，在类中一定要有无参数的构造方法(要使用typeof获得对象类型)
@@ -132,6 +135,13 @@ namespace TLib
             Console.WriteLine("Load");
             if (!File.Exists(file_XML))
             {
+                Variables = new SerializableDictionary<string, object>();
+                foreach (var item in lstVarName)
+                {
+                    PropertyInfo pi = reference.GetType().GetProperty(item);
+                    object value = pi.GetValue(reference, null);
+                    Variables.Add(item, value);
+                }
                 return;
             }
             using (FileStream fs = new FileStream(file_XML, FileMode.Open, FileAccess.Read))
@@ -155,6 +165,7 @@ namespace TLib
                 pi.SetValue(reference, item.Value);
             }
         }
+
     }
     /// <summary>
     /// 序列化的字典,支持集合序列化
@@ -194,45 +205,21 @@ namespace TLib
                 reader.ReadStartElement("SerializableDictionary");
                 string str_type_key = reader.GetAttribute(0);
                 var type_key = Type.GetType(str_type_key, true);
+                #region ReadKey
                 reader.ReadStartElement("key");
                 XmlSerializer KeySerializer = new XmlSerializer(type_key);
                 TKey tk = (TKey)KeySerializer.Deserialize(reader);
                 reader.ReadEndElement();
+                #endregion
                 string str_type_value = reader.GetAttribute(0);
-
-                Type type_value = typeof(object);
-                bool isSuccess = false;
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    try
-                    {
-                        type_value = assembly.GetType(str_type_value, true);
-                        isSuccess = true;
-                    }
-                    catch (Exception)
-                    {
-
-
-                    }
-                }
-                if (!isSuccess)
+                Type type_value = SearchType(str_type_value);
+                if (type_value== null)//试图拯救一下
                 {
                     if (str_type_value.Contains("System.Collections.Generic.List`1"))
                     {
                         string inner_str = str_type_value.Substring(34, str_type_value.Length - 35);
-                        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                        {
-                            try
-                            {
-                                type_value = assembly.GetType(inner_str, true);
-                            }
-                            catch (Exception)
-                            {
-
-
-                            }
-                        }
-                        type_value = CreateGeneric(typeof(List<>), type_value);
+                        type_value = SearchType(inner_str);
+                        type_value = typeof(List<>).MakeGenericType(type_value) ;
                     }
                 }
                 reader.ReadStartElement("value");
@@ -249,10 +236,25 @@ namespace TLib
         {
             return null;
         }
-        public static Type CreateGeneric(Type generic, Type innerType, params object[] args)
-        {
-            Type specificType = generic.MakeGenericType(new System.Type[] { innerType });
-            return specificType;
+        /// <summary>
+        /// 在所有已经加载的程序集中根据字符串寻找类型
+        /// </summary>
+        /// <param name="str_type"></param>
+        /// <returns></returns>
+        private Type SearchType(string str_type) {
+            Type type = null;
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    type = assembly.GetType(str_type, true);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            return type;
         }
     }
 
