@@ -154,55 +154,42 @@ namespace TLib
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
     {
         public SerializableDictionary() { }
-        public void WriteXml(XmlWriter write)       // Serializer
+        public void WriteXml(XmlWriter write)
         {
-            XmlSerializer KeySerializer = new XmlSerializer(typeof(TKey));
-            XmlSerializer ValueSerializer = new XmlSerializer(typeof(TValue));
-
             foreach (KeyValuePair<TKey, TValue> kv in this)
             {
-            
                 write.WriteStartElement("SerializableDictionary");
-            
                 write.WriteStartElement("key");
-                
+                XmlSerializer KeySerializer = new XmlSerializer(kv.Key.GetType());
+                write.WriteStartAttribute("type");
+                write.WriteValue(kv.Key.GetType().ToString());
                 KeySerializer.Serialize(write, kv.Key);
-                
-
                 write.WriteEndElement();
-                
                 write.WriteStartElement("value");
-                
-                try
-                {
-                    ValueSerializer.Serialize(write, kv.Value);
-                }
-                catch (Exception)
-                {
-
-                 
-                }
-                
-                
+                XmlSerializer ValueSerializer = new XmlSerializer(kv.Value.GetType());
+                write.WriteStartAttribute("type");
+                write.WriteValue(kv.Value.GetType().ToString());
+                ValueSerializer.Serialize(write, kv.Value);
                 write.WriteEndElement();
-                
                 write.WriteEndElement();
-                
             }
         }
-        public void ReadXml(XmlReader reader)       // Deserializer
+        public void ReadXml(XmlReader reader)
         {
             reader.Read();
-            XmlSerializer KeySerializer = new XmlSerializer(typeof(TKey));
-            XmlSerializer ValueSerializer = new XmlSerializer(typeof(TValue));
-
             while (reader.NodeType != XmlNodeType.EndElement)
             {
                 reader.ReadStartElement("SerializableDictionary");
+                string str_type_key = reader.GetAttribute(0);
+                var type_key = Type.GetType(str_type_key, true);
                 reader.ReadStartElement("key");
+                XmlSerializer KeySerializer = new XmlSerializer(type_key);
                 TKey tk = (TKey)KeySerializer.Deserialize(reader);
                 reader.ReadEndElement();
+                string str_type_value = reader.GetAttribute(0);
+                var type_value = Type.GetType(str_type_value, true);
                 reader.ReadStartElement("value");
+                XmlSerializer ValueSerializer = new XmlSerializer(type_value);
                 TValue vl = (TValue)ValueSerializer.Deserialize(reader);
                 reader.ReadEndElement();
                 reader.ReadEndElement();
@@ -210,7 +197,6 @@ namespace TLib
                 reader.MoveToContent();
             }
             reader.ReadEndElement();
-
         }
         public XmlSchema GetSchema()
         {
