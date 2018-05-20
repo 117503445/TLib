@@ -9,7 +9,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 
-namespace TLib
+namespace TLib.Software
 {
     /// <summary>
     /// 无污染无公害的序列化器

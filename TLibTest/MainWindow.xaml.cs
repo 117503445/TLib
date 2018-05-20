@@ -19,6 +19,8 @@ using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using TLib.Software;
+using TLib.UI.WPF_MessageBox;
 
 namespace TLibTest
 {

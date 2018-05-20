@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TLib
+namespace TLib.UI.WPF_MessageBox
 {
     /// <summary>
     /// WdMessageBox.xaml 的交互逻辑

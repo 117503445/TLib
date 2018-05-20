@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TLib
+namespace TLib.Software
 {
     public static class Logger
     {

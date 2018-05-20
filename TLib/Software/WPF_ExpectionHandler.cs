@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TLib.UI.WPF_MessageBox;
 
-namespace TLib
+namespace TLib.Software
 {
     /// <summary>
     /// 把你交给我,我帮你处理异常
