@@ -16,12 +16,15 @@ namespace TLib.Software
     /// </summary>
     public class Serializer
     {
+        /// <summary>
+        /// 垃圾回收的时候保存一下
+        /// </summary>
         ~Serializer()
         {
-           Save();
+            Save();
         }
         /// <summary>
-        /// 变量字典,&lt;变量名,变量值&gt;
+        /// 变量字典,变量名,变量值;
         /// </summary>
         private SerializableDictionary<string, object> Variables { get; set; }
         /// <summary>
@@ -45,6 +48,9 @@ namespace TLib.Software
             this.file_XML = file_XML;
             this.reference = reference;
             this.lstVarName = lstVarName;
+
+
+
             Load();
             foreach (var item in lstVarName)//字段列表增加时,添加纪录到字典
             {
@@ -94,38 +100,57 @@ namespace TLib.Software
         /// </summary>
         private void Load()
         {
-            Console.WriteLine("Load");
-            if (!File.Exists(file_XML))
+
+            Variables = new SerializableDictionary<string, object>();
+            foreach (var item in lstVarName)
             {
-                Variables = new SerializableDictionary<string, object>();
-                foreach (var item in lstVarName)
-                {
-                    PropertyInfo pi = reference.GetType().GetProperty(item);
-                    object value = pi.GetValue(reference, null);
-                    Variables.Add(item, value);
-                }
-                return;
+                PropertyInfo pi = reference.GetType().GetProperty(item);
+                object value = pi.GetValue(reference, null);
+                Variables.Add(item, value);
+                SerializableDictionary<string, object>.CustomTypes.Add(value.GetType());
             }
-            using (FileStream fs = new FileStream(file_XML, FileMode.Open, FileAccess.Read))
+            if (File.Exists(file_XML))
             {
-                XmlSerializer xml = new XmlSerializer(typeof(SerializableDictionary<string, object>));
-                Variables = (SerializableDictionary<string, object>)xml.Deserialize(fs);
+                SerializableDictionary<string, object> xmlDictionary = null;
+                using (FileStream fs = new FileStream(file_XML, FileMode.Open, FileAccess.Read))
+                {
+                    XmlSerializer xml = new XmlSerializer(typeof(SerializableDictionary<string, object>));
+                    xmlDictionary = (SerializableDictionary<string, object>)xml.Deserialize(fs);
+                }
+                foreach (var item in xmlDictionary)
+                {
+                    try
+                    {
+                        Variables[item.Key] = item.Value;
+                    }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    //if (lstVarName.Contains(item.Key))
+                    //{
+                    //    Variables.Add(item.Key,item.va);
+                    //}
+                }
+                foreach (var item in Variables)
+                {
+                    Type type = reference.GetType();
+                    PropertyInfo pi = type.GetProperty(item.Key);
+                    object value = pi.GetValue(reference, null);
+                    pi.SetValue(reference, item.Value);
+                }
             }
 
-            for (int i = Variables.Count - 1; i >= 0; i--)//字段列表减少时,移除字典纪录
-            {
-                if (!lstVarName.Contains(Variables.ElementAt(i).Key))
-                {
-                    Variables.Remove(Variables.ElementAt(i).Key);
-                }
-            }
-            foreach (var item in Variables)
-            {
-                Type type = reference.GetType();
-                PropertyInfo pi = type.GetProperty(item.Key);
-                object value = pi.GetValue(reference, null);
-                pi.SetValue(reference, item.Value);
-            }
+
+            //for (int i = Variables.Count - 1; i >= 0; i--)//字段列表减少时,移除字典纪录
+            //{
+            //    if (!lstVarName.Contains(Variables.ElementAt(i).Key))
+            //    {
+            //        Variables.Remove(Variables.ElementAt(i).Key);
+            //    }
+            //}
+
         }
 
     }
@@ -137,7 +162,10 @@ namespace TLib.Software
     [Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
     {
-
+        /// <summary>
+        /// 传入自定义类型的type
+        /// </summary>
+        public static List<Type> CustomTypes { get; set; } = new List<Type>();
         public SerializableDictionary() { }
         public void WriteXml(XmlWriter write)
         {
@@ -175,15 +203,15 @@ namespace TLib.Software
                 #endregion
                 string str_type_value = reader.GetAttribute(0);
                 Type type_value = SearchType(str_type_value);
-                if (type_value== null)//试图拯救一下
-                {
-                    if (str_type_value.Contains("System.Collections.Generic.List`1"))
-                    {
-                        string inner_str = str_type_value.Substring(34, str_type_value.Length - 35);
-                        type_value = SearchType(inner_str);
-                        type_value = typeof(List<>).MakeGenericType(type_value) ;
-                    }
-                }
+                //if (type_value == null)//试图拯救一下
+                //{
+                //    if (str_type_value.Contains("System.Collections.Generic.List`1"))
+                //    {
+                //        string inner_str = str_type_value.Substring(34, str_type_value.Length - 35);
+                //        type_value = SearchType(inner_str);
+                //        type_value = typeof(List<>).MakeGenericType(type_value);
+                //    }
+                //}
                 reader.ReadStartElement("value");
                 XmlSerializer ValueSerializer = new XmlSerializer(type_value);
                 TValue vl = (TValue)ValueSerializer.Deserialize(reader);
@@ -203,8 +231,16 @@ namespace TLib.Software
         /// </summary>
         /// <param name="str_type"></param>
         /// <returns></returns>
-        private Type SearchType(string str_type) {
+        private Type SearchType(string str_type)
+        {
             Type type = null;
+            foreach (var item in CustomTypes)
+            {
+                if (item.ToString() == str_type)
+                {
+                    return item;
+                }
+            }
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 try

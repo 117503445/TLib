@@ -32,17 +32,18 @@ namespace TLibTest
         public MainWindow()
         {
             InitializeComponent();
-            Serializer serializer = new Serializer(this, "1.xml", new List<string>() {  nameof(Var_list_People)});
+            //SerializableDictionary<string, object>.CustomTypes.Add(value.GetType());
+            //SerializableDictionary<string, object>.CustomTypes.Add(typeof(List<People>));
+            Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_list_People) });
 
             //nameof(Var_bool), nameof(D), nameof(Var_list_int),
         }
-        //
         public static int Var_int { get; set; } = 2;
         public static string Var_string { get; set; } = "Hello";
         public static bool Var_bool { get; set; } = false;
         public static List<int> Var_list_int { get; set; } = new List<int> { 2, 3, 4, 5 };
         public static List<People> Var_list_People { get; set; } = new List<People>() { new People() { Age = 1 } };
-        public static People Var_people { get; set; } = new People() { Age=23};
+        public static People Var_people { get; set; } = new People() { Age = 23 };
         public static SerializableDictionary<string, int> D { get; set; } = new SerializableDictionary<string, int>()
         {
             { "0",2}
@@ -60,7 +61,6 @@ namespace TLibTest
             }
             Var_people.Age++;
         }
-
         private void BtnDebug1_Click(object sender, RoutedEventArgs e)
         {
             //Console.WriteLine(Var_int);
@@ -73,19 +73,16 @@ namespace TLibTest
             Console.WriteLine(Var_list_People[0].Age);
             //Console.WriteLine(Var_people.Age);
         }
-
         private async void BtnDebug2_Click(object sender, RoutedEventArgs e)
         {
             var i = await WdMessageBox.Display(content: "", Btn1text: "确认", Btn2text: "取消");
             Console.WriteLine(i);
         }
-
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
             throw new Exception("233");
         }
     }
-   [Serializable]
     public class People
     {
         public int Age { get; set; }
