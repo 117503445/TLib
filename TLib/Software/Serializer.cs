@@ -48,9 +48,6 @@ namespace TLib.Software
             this.file_XML = file_XML;
             this.reference = reference;
             this.lstVarName = lstVarName;
-
-
-
             Load();
             foreach (var item in lstVarName)//字段列表增加时,添加纪录到字典
             {
@@ -68,7 +65,7 @@ namespace TLib.Software
             System.Timers.Timer timer = new System.Timers.Timer
             {
                 Enabled = true,
-                Interval = 1000
+                Interval = 5000
             };
             timer.Elapsed += (s, e) =>
             {
@@ -126,7 +123,7 @@ namespace TLib.Software
                     catch (Exception)
                     {
 
-                        
+
                     }
                     //if (lstVarName.Contains(item.Key))
                     //{
@@ -179,7 +176,17 @@ namespace TLib.Software
                 KeySerializer.Serialize(write, kv.Key);
                 write.WriteEndElement();
                 write.WriteStartElement("value");
-                XmlSerializer ValueSerializer = new XmlSerializer(kv.Value.GetType());
+                XmlSerializer ValueSerializer = null;
+                try
+                {
+                    ValueSerializer = new XmlSerializer(kv.Value.GetType());
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteException(ex);
+                    throw ex;
+                }
+
                 write.WriteStartAttribute("type");
                 write.WriteValue(kv.Value.GetType().ToString());
                 ValueSerializer.Serialize(write, kv.Value);
