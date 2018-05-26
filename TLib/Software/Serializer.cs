@@ -35,14 +35,16 @@ namespace TLib.Software
         /// XML文件路径
         /// </summary>
         private readonly string file_XML = string.Empty;
-
-        private List<string> lstVarName;
+        /// <summary>
+        /// 属性名列表
+        /// </summary>
+        private readonly List<string> lstVarName;
         /// <summary>
         /// 创建序列化器,并通过Load方法加载已保存的值
         /// </summary>
         /// <param name="reference">填写this以传递引用</param>
         /// <param name="file_XML">XML文件路径</param>
-        /// <param name="lstVarName">属性列表</param>
+        /// <param name="lstVarName">属性名列表</param>
         public Serializer(object reference, string file_XML, List<string> lstVarName)
         {
             this.file_XML = file_XML;
