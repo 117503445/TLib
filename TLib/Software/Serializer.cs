@@ -11,6 +11,8 @@ using System.Xml.Serialization;
 
 namespace TLib.Software
 {
+
+
     /// <summary>
     /// 无污染无公害的序列化器
     /// </summary>
@@ -153,6 +155,7 @@ namespace TLib.Software
         }
 
     }
+
     /// <summary>
     /// 序列化的字典,支持集合序列化
     /// </summary>
@@ -265,4 +268,26 @@ namespace TLib.Software
         }
     }
 
+
+
+    public static class SerializeHelper
+    {
+        public static void Save<T>(T o, string file_XML)
+        {
+            using (FileStream fs = new FileStream(file_XML, FileMode.Create, FileAccess.Write))
+            {
+                //在进行XML序列化的时候，在类中一定要有无参数的构造方法(要使用typeof获得对象类型)
+                XmlSerializer xml = new XmlSerializer(typeof(T));
+                xml.Serialize(fs, o);
+            }
+        }
+        public static T Load<T>(string file_XML)
+        {
+            using (FileStream fs = new FileStream(file_XML, FileMode.Open, FileAccess.Read))
+            {
+                XmlSerializer xml = new XmlSerializer(typeof(T));
+                return (T)xml.Deserialize(fs);
+            }
+        }
+    }
 }

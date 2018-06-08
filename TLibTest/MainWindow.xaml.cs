@@ -80,7 +80,10 @@ namespace TLibTest
         }
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
-            throw new Exception("233");
+            var i = 133;
+            //SerializeHelper.Save(i,"132.xml");
+            i = SerializeHelper.Load<int>("132.xml");
+            Console.WriteLine(i);
         }
     }
     public class People
