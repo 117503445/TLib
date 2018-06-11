@@ -80,10 +80,11 @@ namespace TLibTest
         }
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
-            var i = 133;
-            //SerializeHelper.Save(i,"132.xml");
-            i = SerializeHelper.Load<int>("132.xml");
-            Console.WriteLine(i);
+            //var i = 133;
+            ////SerializeHelper.Save(i,"132.xml");
+            //i = SerializeHelper.Load<int>("132.xml");
+            //Console.WriteLine(i);
+            Console.WriteLine(TimeStamp.Now);
         }
     }
     public class People
