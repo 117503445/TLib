@@ -80,7 +80,7 @@ namespace TLib.Software
         /// <summary>
         /// 保存至XML文件
         /// </summary>
-        private void Save()
+        public void Save()
         {
             Console.WriteLine($"save {DateTime.Now}");
             for (int i = 0; i < Variables.Count; i++)
