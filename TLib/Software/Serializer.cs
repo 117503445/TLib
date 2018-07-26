@@ -105,6 +105,7 @@ namespace TLib.Software
             Variables = new SerializableDictionary<string, object>();
             foreach (var item in lstVarName)
             {
+                //Console.WriteLine(item);
                 PropertyInfo pi = reference.GetType().GetProperty(item);
                 object value = pi.GetValue(reference, null);
                 Variables.Add(item, value);
