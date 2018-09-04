@@ -36,8 +36,7 @@ namespace TLib
             for (int i = 0; i < count; i++)
             {
                 n = random.Next(0, r);
-
-                newC[i] = randomArray[n];
+                newC.Add(list[randomArray[n]]);
                 Swap(ref randomArray[n], ref randomArray[r]);
                 r--;
             }

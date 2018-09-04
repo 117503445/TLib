@@ -80,16 +80,28 @@ namespace TLibTest
         }
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
-            //var i = 133;
-            ////SerializeHelper.Save(i,"132.xml");
-            //i = SerializeHelper.Load<int>("132.xml");
-            //Console.WriteLine(i);
-            Console.WriteLine(TimeStamp.Now);
+            List<int> list = new List<int> { 5, 3, 6, 4, 76, 43 };
+            RandomReserve(ref list);
+            list.ForEach(i=>Console.WriteLine(i));
+        }/// <summary>
+         /// 数组随机排序
+         /// </summary>
+         /// <typeparam name="T"></typeparam>
+         /// <param name="list"></param>
+        public static void RandomReserve<T>(ref T list) where T : System.Collections.IList, new()
+        {
+            
+        }
+        public static void Swap<T>(ref T object0, ref T object1)
+        {
+            T tmp = object0;
+            object0 = object1;
+            object1 = tmp;
         }
     }
     public class People
     {
         public int Age { get; set; }
     }
-
+    
 }
