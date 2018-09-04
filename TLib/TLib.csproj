@@ -52,6 +52,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSharp.cs" />
     <Compile Include="IO\SyncDir.cs" />
     <Compile Include="IO\UsbCopyer.cs" />
     <Compile Include="IO\UserIO.cs" />
