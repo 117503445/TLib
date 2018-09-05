@@ -2,6 +2,9 @@
 
 namespace TLib
 {
+    /// <summary>
+    /// 提供一些基础的方法
+    /// </summary>
     public static class CSharp
     {
         /// <summary>

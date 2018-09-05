@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace TLib.Software
 {
+    /// <summary>
+    /// 通用的Logger
+    /// </summary>
     public static class Logger
     {
         public static string Dir_Log { get; set; } = AppDomain.CurrentDomain.BaseDirectory + "File\\";
@@ -33,15 +36,15 @@ namespace TLib.Software
         {
             XDocument xml = GetXMLFromDisk();
             xml.Root.Add(new XElement("Expection", new XElement("Time", DateTime.Now.ToLocalTime().ToString()), new XElement("Message", e.Message), new XElement("Data", e.Data), new XElement("Source", e.Source), new XElement("StackTrace", e.StackTrace), new XElement("TargetSite", e.TargetSite), new XElement("HResult", e.HResult), new XElement("HelpLink", e.HelpLink), new XAttribute("Handled", handled), new XAttribute("Info", info)));
-            SaveXML(xml);
+            SaveXMLToDisk(xml);
         }
         public static void Write(string info, string type = "info")
         {
             XDocument xml = GetXMLFromDisk();
             xml.Root.Add(new XElement("Log", new XAttribute("Time", DateTime.Now.ToLocalTime().ToString()), new XAttribute("Info", info), new XAttribute("Type", type)));
-            SaveXML(xml);
+            SaveXMLToDisk(xml);
         }
-        private static void SaveXML(XDocument xml)
+        private static void SaveXMLToDisk(XDocument xml)
         {
             Directory.CreateDirectory(Dir_Log);
             xml.Save(File_Log);

@@ -39,7 +39,6 @@ namespace TLib.Software
             {
                 Logger.Write("Error,不可恢复的非UI异常", "Bad");
                 await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", Btn2text: "确认");
-
             }
         }
         private static async void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
