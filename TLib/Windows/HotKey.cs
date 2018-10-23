@@ -51,13 +51,13 @@ namespace TLib.Windows
                 return;
             if (_isKeyRegistered)
                 UnregisterHotKey();
-            _isKeyRegistered = Win32API.RegisterHotKey(_handle, _id, KeyModifier, Key);
+            _isKeyRegistered = KeyboardHookAPI.RegisterHotKey(_handle, _id, KeyModifier, Key);
             if (!_isKeyRegistered)
                 throw new ApplicationException("Hotkey already in use");
         }
         public void UnregisterHotKey()
         {
-            _isKeyRegistered = !Win32API.UnregisterHotKey(_handle, _id);
+            _isKeyRegistered = !KeyboardHookAPI.UnregisterHotKey(_handle, _id);
         }
         public void Dispose()
         {
@@ -68,7 +68,7 @@ namespace TLib.Windows
         {
             if (!handled)
             {
-                if (msg.message == Win32API.WmHotKey
+                if (msg.message == KeyboardHookAPI.WmHotKey
                     && (int)(msg.wParam) == _id)
                 {
                     OnHotKeyPressed();
@@ -81,7 +81,7 @@ namespace TLib.Windows
             HotKeyPressed?.Invoke(this);
         }
     }
-    public partial class Win32API
+    public partial class KeyboardHookAPI
     {
         public const int WmHotKey = 0x0312;
         [DllImport("user32.dll", SetLastError = true)]

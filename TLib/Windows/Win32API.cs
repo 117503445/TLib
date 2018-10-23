@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TLib.Windows
 {
-    public partial class Win32API
+    public partial class KeyboardHookAPI
     {
         [System.Runtime.InteropServices.DllImport("User32.dll")]
         static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);

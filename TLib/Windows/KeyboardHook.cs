@@ -9,7 +9,8 @@ using System.Windows.Input;
 
 namespace TLib.Windows
 {
-    public partial class Win32API
+
+    public partial class KeyboardHookAPI
     {
         public const int WM_KEYDOWN = 0x100;
         public const int WM_KEYUP = 0x101;
@@ -20,7 +21,7 @@ namespace TLib.Windows
         public class KeyboardHookStruct
         {
             public int vkCode; //表示一个在1到254间的虚似键盘码 
-            public int scanCode; //表示硬件扫描码 
+            public int scanCode; //表示硬件扫描码
             public int flags;
             public int time;
             public int dwExtraInfo;
@@ -48,7 +49,7 @@ namespace TLib.Windows
             get
             {
                 byte[] bs = new byte[256];
-                Win32API.GetKeyboardState(bs);
+                KeyboardHookAPI.GetKeyboardState(bs);
                 bool result = (bs[0x14] == 1);
                 //Console.WriteLine("result="+result);
                 return result;
@@ -58,16 +59,16 @@ namespace TLib.Windows
         readonly bool isWriteDown = false;
         public KeyboardHook(bool isWriteDown) { this.isWriteDown = isWriteDown; }
         int hHook;
-        Win32API.HookProc KeyboardHookDelegate;
+        KeyboardHookAPI.HookProc KeyboardHookDelegate;
         /// <summary>
         /// 安装键盘钩子
         /// </summary>
         public void SetHook()
         {
-            KeyboardHookDelegate = new Win32API.HookProc(KeyboardHookProc);
+            KeyboardHookDelegate = new KeyboardHookAPI.HookProc(KeyboardHookProc);
             ProcessModule cModule = Process.GetCurrentProcess().MainModule;
-            var mh = Win32API.GetModuleHandle(cModule.ModuleName);
-            hHook = Win32API.SetWindowsHookEx(Win32API.WH_KEYBOARD_LL, KeyboardHookDelegate, mh, 0);
+            var mh = KeyboardHookAPI.GetModuleHandle(cModule.ModuleName);
+            hHook = KeyboardHookAPI.SetWindowsHookEx(KeyboardHookAPI.WH_KEYBOARD_LL, KeyboardHookDelegate, mh, 0);
             GCHandle.Alloc(KeyboardHookDelegate);
         }
         /// <summary>
@@ -75,7 +76,7 @@ namespace TLib.Windows
         /// </summary>
         public void UnHook()
         {
-            Win32API.UnhookWindowsHookEx(hHook);
+            KeyboardHookAPI.UnhookWindowsHookEx(hHook);
         }
         public EventHandler<KeyEventArgs> OnKeyDownEvent;
         public EventHandler<KeyEventArgs> OnKeyUpEvent;
@@ -91,10 +92,10 @@ namespace TLib.Windows
             // 如果该消息被丢弃（nCode<0
             if (nCode >= 0)
             {
-                Win32API.KeyboardHookStruct KeyDataFromHook = (Win32API.KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(Win32API.KeyboardHookStruct));
+                KeyboardHookAPI.KeyboardHookStruct KeyDataFromHook = (KeyboardHookAPI.KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyboardHookAPI.KeyboardHookStruct));
                 int keyData = KeyDataFromHook.vkCode;
                 //WM_KEYDOWN和WM_SYSKEYDOWN消息，将会引发OnKeyDownEvent事件
-                if ((wParam == Win32API.WM_KEYDOWN || wParam == Win32API.WM_SYSKEYDOWN))
+                if ((wParam == KeyboardHookAPI.WM_KEYDOWN || wParam == KeyboardHookAPI.WM_SYSKEYDOWN))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
                     OnKeyDownEvent?.Invoke(this, new KeyEventArgs(key));
@@ -104,7 +105,7 @@ namespace TLib.Windows
                     }
                 }
                 //WM_KEYUP和WM_SYSKEYUP消息，将引发OnKeyUpEvent事件 
-                if ((wParam == Win32API.WM_KEYUP || wParam == Win32API.WM_SYSKEYUP))
+                if ((wParam == KeyboardHookAPI.WM_KEYUP || wParam == KeyboardHookAPI.WM_SYSKEYUP))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
                     OnKeyUpEvent?.Invoke(this, new KeyEventArgs(key));
@@ -114,7 +115,7 @@ namespace TLib.Windows
                     }
                 }
             }
-            return Win32API.CallNextHookEx(hHook, nCode, wParam, lParam);
+            return KeyboardHookAPI.CallNextHookEx(hHook, nCode, wParam, lParam);
         }
         public class KeyEventArgs : EventArgs
         {

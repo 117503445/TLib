@@ -30,7 +30,7 @@ namespace TLib.IO
         //}
 
         /// <summary>
-        /// 同步文件!
+        /// 高效的进行文件夹同步
         /// </summary>
         public static void Sync(string sourceStr, string destStr, string backupStr = "")
         {
