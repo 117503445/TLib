@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace TLib.Windows
 {
 
-    public  class KeyboardHookAPI
+    public class KeyboardHookAPI
     {
         public const int WM_KEYDOWN = 0x100;
         public const int WM_KEYUP = 0x101;
@@ -44,7 +40,7 @@ namespace TLib.Windows
     }
     public class KeyboardHook
     {
-        public static bool CapsLockStatus
+        private static bool CapsLockStatus
         {
             get
             {
@@ -55,9 +51,17 @@ namespace TLib.Windows
                 return result;
             }
         }
-
-        readonly bool isWriteDown = false;
-        public KeyboardHook(bool isWriteDown) { this.isWriteDown = isWriteDown; }
+        /// <summary>
+        /// 是否拦截键盘
+        /// </summary>
+        public bool IsHoldKey { get; set; } = false;
+        /// <summary>
+        /// 初始化时自动Hook键盘
+        /// </summary>
+        public KeyboardHook()
+        {
+            SetHook();
+        }
         int hHook;
         KeyboardHookAPI.HookProc KeyboardHookDelegate;
         /// <summary>
@@ -78,8 +82,8 @@ namespace TLib.Windows
         {
             KeyboardHookAPI.UnhookWindowsHookEx(hHook);
         }
-        public EventHandler<KeyEventArgs> OnKeyDownEvent;
-        public EventHandler<KeyEventArgs> OnKeyUpEvent;
+        public EventHandler<KeyboardHookEventArgs> OnKeyDownEvent;
+        public EventHandler<KeyboardHookEventArgs> OnKeyUpEvent;
         /// <summary>
         /// 获取键盘消息
         /// </summary>
@@ -98,29 +102,26 @@ namespace TLib.Windows
                 if ((wParam == KeyboardHookAPI.WM_KEYDOWN || wParam == KeyboardHookAPI.WM_SYSKEYDOWN))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
-                    OnKeyDownEvent?.Invoke(this, new KeyEventArgs(key));
-                    if (isWriteDown)
-                    {
-                        System.IO.File.AppendAllText("KeyLog.txt", string.Format("{0};{1};{2}\r\n", key.ToString(), CapsLockStatus ? 1 : 0, 0));
-                    }
+                    OnKeyDownEvent?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
                 //WM_KEYUP和WM_SYSKEYUP消息，将引发OnKeyUpEvent事件 
                 if ((wParam == KeyboardHookAPI.WM_KEYUP || wParam == KeyboardHookAPI.WM_SYSKEYUP))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
-                    OnKeyUpEvent?.Invoke(this, new KeyEventArgs(key));
-                    if (isWriteDown)
-                    {
-                        System.IO.File.AppendAllText("KeyLog.txt", string.Format("{0};{1};{2}\r\n", key.ToString(), CapsLockStatus ? 1 : 0, 1));
-                    }
+                    OnKeyUpEvent?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
             }
-            return KeyboardHookAPI.CallNextHookEx(hHook, nCode, wParam, lParam);
+            return IsHoldKey ? -1 : KeyboardHookAPI.CallNextHookEx(hHook, nCode, wParam, lParam);
         }
-        public class KeyEventArgs : EventArgs
+    }
+    public class KeyboardHookEventArgs : EventArgs
+    {
+        public bool CapsLockStatus = false;
+        public Key key;
+        public KeyboardHookEventArgs(Key key, bool CapsLockStatus) { this.key = key; this.CapsLockStatus = CapsLockStatus; }
+        public override string ToString()
         {
-            public Key key;
-            public KeyEventArgs(Key key) { this.key = key; }
+            return string.Format("{0};{1};{2}\r\n", key.ToString(), CapsLockStatus ? 1 : 0, 1);
         }
     }
 }
