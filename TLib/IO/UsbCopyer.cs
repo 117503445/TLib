@@ -11,7 +11,7 @@ namespace TLib.IO
 {
     public class UsbCopyer
     {
-        public static string TimeStamp() { DateTime t = DateTime.Now; return t.Year.ToString() + "_" + t.Month.ToString() + "_" + t.Day.ToString() + "_" + t.Hour.ToString() + "_" + t.Minute.ToString() + "_" + t.Second.ToString() + "_" + t.Millisecond.ToString(); }
+
         /// <summary>
         /// 例:  "G:/",初始化为
         /// </summary>
@@ -63,7 +63,7 @@ namespace TLib.IO
         {
             Task.Run(() =>
             {
-                string timestamp = TimeStamp();
+                string timestamp = Software.TimeStamp.Now;
                 try
                 {
                     Console.WriteLine("Coying:HackDrive={0},Path={1}", dirSource, dirDestination + timestamp);

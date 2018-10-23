@@ -44,7 +44,7 @@ namespace TLib.Software
         /// <summary>
         /// 创建序列化器,并通过Load方法加载已保存的值
         /// </summary>
-        /// <param name="reference">填写this以传递引用</param>
+        /// <param name="reference">填写this以传递引用,传递null则为控制台程序</param>
         /// <param name="file_XML">XML文件路径</param>
         /// <param name="lstVarName">属性名列表</param>
         public Serializer(object reference, string file_XML, List<string> lstVarName)
@@ -82,7 +82,7 @@ namespace TLib.Software
         /// </summary>
         public void Save()
         {
-            Console.WriteLine($"save {DateTime.Now}");
+            //Console.WriteLine($"save {DateTime.Now}");
             for (int i = 0; i < Variables.Count; i++)
             {
                 PropertyInfo pi = reference.GetType().GetProperty(Variables.ElementAt(i).Key);

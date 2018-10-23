@@ -11,7 +11,7 @@ namespace TLib.IO
     public static class UserIO
     {
         /// <summary>
-        /// 基于遍历的复制文件夹
+        /// 基于遍历的文件夹复制
         /// </summary>
         /// <param name="sourcePath"></param>
         /// <param name="destPath"></param>
@@ -81,11 +81,11 @@ namespace TLib.IO
         }
 
         /// <summary>
-        /// 安全的复制
+        /// 安全复制,不断尝试复制文件
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <param name="destFilePath"></param>
-        /// <param name="waitTime">每次尝试复制以后等待,毫秒</param>
+        /// <param name="waitTime">每次尝试复制以后等待时间,毫秒</param>
         /// <param name="n">次数</param>
         /// <returns></returns>
         public static async Task<bool> SafeCopy(string sourceFilePath, string destFilePath, int waitTime = 200, int n = 3)
@@ -95,7 +95,6 @@ namespace TLib.IO
 #if DEBUG
                 throw new ArgumentException("原路径不存在");
 #endif
-          
             }
             bool isSuccess = false;
             await Task.Run(() =>
@@ -122,15 +121,20 @@ namespace TLib.IO
             });
             return isSuccess;
         }
-
+        /// <summary>
+        /// 安全删除,不断尝试删除文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="waitTime">每次尝试复制以后等待时间,毫秒</param>
+        /// <param name="n">次数</param>
+        /// <returns></returns>
         public static async Task<bool> SafeDelete(string path, int waitTime = 200, int n = 3)
         {
             if (!File.Exists(path))
             {
 #if DEBUG
-                throw new ArgumentException("删除路径不存在");
+                throw new ArgumentException("原路径不存在");
 #endif
-                
             }
             bool isSuccess = false;
             await Task.Run(() =>

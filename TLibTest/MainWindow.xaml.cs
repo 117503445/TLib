@@ -1,24 +1,6 @@
 ﻿using System;
-using TLib;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using TLib.Software;
 using TLib.UI.WPF_MessageBox;
 
@@ -63,6 +45,7 @@ namespace TLibTest
         }
         private void BtnDebug1_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Write(233);
             //Console.WriteLine(Var_int);
             //Console.WriteLine(Var_string);
             //Console.WriteLine(Var_bool);
@@ -70,7 +53,9 @@ namespace TLibTest
             //{
             //    Console.WriteLine(item);
             //});
+
             Console.WriteLine(Var_list_People[0].Age);
+
             //Console.WriteLine(Var_people.Age);
         }
         private async void BtnDebug2_Click(object sender, RoutedEventArgs e)
@@ -81,27 +66,13 @@ namespace TLibTest
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
             List<int> list = new List<int> { 5, 3, 6, 4, 76, 43 };
-            RandomReserve(ref list);
-            list.ForEach(i=>Console.WriteLine(i));
-        }/// <summary>
-         /// 数组随机排序
-         /// </summary>
-         /// <typeparam name="T"></typeparam>
-         /// <param name="list"></param>
-        public static void RandomReserve<T>(ref T list) where T : System.Collections.IList, new()
-        {
             
-        }
-        public static void Swap<T>(ref T object0, ref T object1)
-        {
-            T tmp = object0;
-            object0 = object1;
-            object1 = tmp;
+            list.ForEach(i => Console.WriteLine(i));
         }
     }
     public class People
     {
         public int Age { get; set; }
     }
-    
+
 }
