@@ -10,7 +10,7 @@ using System.Windows.Input;
 namespace TLib.Windows
 {
 
-    public partial class KeyboardHookAPI
+    public  class KeyboardHookAPI
     {
         public const int WM_KEYDOWN = 0x100;
         public const int WM_KEYUP = 0x101;

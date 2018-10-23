@@ -70,7 +70,6 @@
     <Compile Include="Windows\SimulationKeyboardAndMouse.cs" />
     <Compile Include="Windows\HotKey.cs" />
     <Compile Include="Windows\KeyboardHook.cs" />
-    <Compile Include="Windows\Win32API.cs" />
     <Compile Include="Software\WPF_ExpectionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
