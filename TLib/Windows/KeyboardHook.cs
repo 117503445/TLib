@@ -82,8 +82,8 @@ namespace TLib.Windows
         {
             KeyboardHookAPI.UnhookWindowsHookEx(hHook);
         }
-        public EventHandler<KeyboardHookEventArgs> OnKeyDownEvent;
-        public EventHandler<KeyboardHookEventArgs> OnKeyUpEvent;
+        public EventHandler<KeyboardHookEventArgs> KeyDown;
+        public EventHandler<KeyboardHookEventArgs> KeyUp;
         /// <summary>
         /// 获取键盘消息
         /// </summary>
@@ -102,13 +102,13 @@ namespace TLib.Windows
                 if ((wParam == KeyboardHookAPI.WM_KEYDOWN || wParam == KeyboardHookAPI.WM_SYSKEYDOWN))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
-                    OnKeyDownEvent?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
+                    KeyDown?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
                 //WM_KEYUP和WM_SYSKEYUP消息，将引发OnKeyUpEvent事件 
                 if ((wParam == KeyboardHookAPI.WM_KEYUP || wParam == KeyboardHookAPI.WM_SYSKEYUP))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
-                    OnKeyUpEvent?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
+                    KeyUp?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
             }
             return IsHoldKey ? -1 : KeyboardHookAPI.CallNextHookEx(hHook, nCode, wParam, lParam);

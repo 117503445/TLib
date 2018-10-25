@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using TLib.Software;
 using TLib.UI.WPF_MessageBox;
-
+using TLib.Windows;
 namespace TLibTest
 {
     /// <summary>
@@ -17,7 +17,11 @@ namespace TLibTest
             //SerializableDictionary<string, object>.CustomTypes.Add(value.GetType());
             //SerializableDictionary<string, object>.CustomTypes.Add(typeof(List<People>));
             Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_list_People) });
-
+            KeyboardHook keyboardHook = new KeyboardHook();
+            keyboardHook.KeyDown += (s, e) =>
+            {
+                Console.WriteLine(e.key);
+            };
             //nameof(Var_bool), nameof(D), nameof(Var_list_int),
         }
         public static int Var_int { get; set; } = 2;
