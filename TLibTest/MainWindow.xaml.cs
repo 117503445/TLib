@@ -74,9 +74,6 @@ namespace TLibTest
             list.ForEach(i => Console.WriteLine(i));
         }
     }
-    public class People
-    {
-        public int Age { get; set; }
-    }
+
 
 }
