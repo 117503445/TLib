@@ -12,6 +12,9 @@ using System.Windows.Interop;
 
 namespace TLib.Windows
 {
+    /// <summary>
+    /// 注册热键
+    /// </summary>
     public sealed class HotKey : IDisposable
     {
         public event Action<HotKey> HotKeyPressed;

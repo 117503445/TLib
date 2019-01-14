@@ -3,15 +3,15 @@
 
 117503445 的个人 C# 类库，分为 IO, Software, UI, Windows 四大类
 
-TLib
-    IO
-        SyncDir
+# TLib
+## IO
+### SyncDir
         高效的进行文件夹同步
-            public static void Sync(string dir_source, string dir_dest, string dir_backup = "")
+#### public static void Sync(string dir_source, string dir_dest, string dir_backup = "")
             高效的进行文件夹同步,避免目标文件夹已经有源文件夹的文件时,仍删除再复制
-            public static List<DirectoryInfo> GetAllDirs(DirectoryInfo info)
+#### public static List<DirectoryInfo> GetAllDirs(DirectoryInfo info)
             遍历文件夹
-            public static List<FileInfo> GetAllFiles(DirectoryInfo info)
+#### public static List<FileInfo> GetAllFiles(DirectoryInfo info)
             遍历文件
         TIO
         TLib 对 File.IO 进行的封装
