@@ -81,7 +81,7 @@ namespace TLib.Windows
             HotKeyPressed?.Invoke(this);
         }
     }
-    public  class HotKeyAPI
+    public class HotKeyAPI
     {
         public const int WmHotKey = 0x0312;
         [DllImport("user32.dll", SetLastError = true)]
