@@ -9,10 +9,13 @@ using TLib.UI.WPF_MessageBox;
 namespace TLib.Software
 {
     /// <summary>
-    /// 把你交给我,我帮你处理异常
+    /// WPF程序的异常处理
     /// </summary>
     public static class WPF_ExpectionHandler
     {
+        /// <summary>
+        /// 对捕获的异常进行额外处理
+        /// </summary>
         public static event EventHandler<Exception> ExpectionCatched;
         /// <summary>
         /// WPF_ExpectionHandler.HandleExpection(Current,AppDomain.CurrentDomain);

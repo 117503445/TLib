@@ -35,12 +35,12 @@ namespace TLib.IO
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dirBackup">备份路径,Exp:"D:/temp/"</param>
+        /// <param name="dir_backup">备份路径,Exp:"D:/temp/"</param>
         /// <param name="isDirectCopy">直接拷贝模式</param>
         /// <param name="isUseNotifyIcon">使用托盘</param>
-        public UsbCopyer(string dirBackup, bool isDirectCopy, bool isUseNotifyIcon)
+        public UsbCopyer(string dir_backup, bool isDirectCopy, bool isUseNotifyIcon)
         {
-            this.dirBackup = dirBackup;
+            this.dirBackup = dir_backup;
             IsDirectCopy = isDirectCopy;
             if (IsDirectCopy)
             {
@@ -59,7 +59,7 @@ namespace TLib.IO
         /// </summary>
         /// <param name="dirSource">源文件夹路径</param>
         /// <param name="dirDestination">目标文件夹路径</param>
-        public void CopyUSB(string dirSource, string dirDestination)
+        private void CopyUSB(string dirSource, string dirDestination)
         {
             Task.Run(() =>
             {
@@ -67,7 +67,7 @@ namespace TLib.IO
                 try
                 {
                     Console.WriteLine("Coying:HackDrive={0},Path={1}", dirSource, dirDestination + timestamp);
-                    UserIO.CopyFolder(dirSource, dirDestination + timestamp);
+                    TIO.CopyFolder(dirSource, dirDestination + timestamp);
                         //SyncDir.Sync(dirSource,dirDestination);
                     }
                 catch (Exception ex)
@@ -78,7 +78,7 @@ namespace TLib.IO
             });
         }
 
-        public void CopyUSB()
+        private void CopyUSB()
         {
             CopyUSB(hackDrive, dirBackup);
         }

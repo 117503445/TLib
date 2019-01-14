@@ -2,6 +2,9 @@
 
 namespace TLib.Software
 {
+    /// <summary>
+    /// 生成yyyy-mm-dd-hh-mm-ss-misd式的时间戳
+    /// </summary>
     public static class TimeStamp
     {
         /// <summary>
@@ -11,15 +14,14 @@ namespace TLib.Software
         {
             get
             {
-                var d = DateTime.Now.ToLocalTime();
-                return $"{d.Year}-{d.Month}-{d.Day}_{d.Hour}-{d.Minute}-{d.Second}-{d.Millisecond}";
+                return standardFormatDatetime(DateTime.Now.ToLocalTime());
             }
         }
         /// <summary>
         /// 返回yyyy-mm-dd-hh-mm-ss-misd格式的时间
         /// </summary>
         /// <returns></returns>
-        public static string TLibFormat(DateTime dateTime)
+        public static string standardFormatDatetime(DateTime dateTime)
         {
             var d = dateTime;
             return $"{d.Year}-{d.Month}-{d.Day}_{d.Hour}-{d.Minute}-{d.Second}-{d.Millisecond}";

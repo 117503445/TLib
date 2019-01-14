@@ -14,7 +14,7 @@ namespace TLib.Software
 
 
     /// <summary>
-    /// 无污染无公害的序列化器
+    /// 适用于各种 C# 程序的序列化类,基于XML,侵入性低,只能序列化公开字段
     /// </summary>
     public class Serializer
     {

@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace TLib.Software
 {
     /// <summary>
-    /// 通用的Logger
+    /// 适用于各种 C# 程序的 Logger,基于XML
     /// </summary>
     public static class Logger
     {
@@ -44,7 +44,7 @@ namespace TLib.Software
             SaveXMLToDisk(xml);
         }
         /// <summary>
-        /// 写入字符串
+        /// 写入各种对象,并储存该对象的toString()的值
         /// </summary>
         /// <param name="info"></param>
         /// <param name="type">Log的类型</param>

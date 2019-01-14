@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using TLib.Software;
 namespace TLib.IO
 {
     /// <summary>
@@ -32,21 +32,21 @@ namespace TLib.IO
         /// <summary>
         /// 高效的进行文件夹同步
         /// </summary>
-        public static void Sync(string sourceStr, string destStr, string backupStr = "")
+        public static void Sync(string dir_source, string dir_dest, string dir_backup = "")
         {
-            if (!Directory.Exists(sourceStr))
+            if (!Directory.Exists(dir_source))
             {
                 throw new ArgumentException("源路径不存在");
 
             }
-            if (!Directory.Exists(destStr))
+            if (!Directory.Exists(dir_dest))
             {
-                Directory.CreateDirectory(destStr);
+                Directory.CreateDirectory(dir_dest);
             }
-            BuildDirs(destStr, GetRelativePath(sourceStr, GetAllDirs(new DirectoryInfo(sourceStr))));
-            CutDirs(sourceStr, destStr, GetRelativePath(destStr, GetAllDirs(new DirectoryInfo(destStr))));
-            CopyFiles(sourceStr, destStr);
-            CutFiles(sourceStr, destStr, backupStr);
+            BuildDirs(dir_dest, GetRelativePath(dir_source, GetAllDirs(new DirectoryInfo(dir_source))));
+            CutDirs(dir_source, dir_dest, GetRelativePath(dir_dest, GetAllDirs(new DirectoryInfo(dir_dest))));
+            CopyFiles(dir_source, dir_dest);
+            CutFiles(dir_source, dir_dest, dir_backup);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace TLib.IO
         /// </summary>
         /// <param name="dest"></param>
         /// <param name="relativePaths"></param>
-        public static void BuildDirs(string dest, List<string> relativePaths)
+        private static void BuildDirs(string dest, List<string> relativePaths)
         {
             foreach (var item in relativePaths)
             {
@@ -67,7 +67,7 @@ namespace TLib.IO
         /// <param name="source"></param>
         /// <param name="dest"></param>
         /// <param name="relativePaths"></param>
-        public static void CutDirs(string source, string dest, List<string> relativePaths)
+        private static void CutDirs(string source, string dest, List<string> relativePaths)
         {
 
             foreach (var item in relativePaths)
@@ -90,7 +90,7 @@ namespace TLib.IO
         /// </summary>
         /// <param name="source"></param>
         /// <param name="dest"></param>
-        public static async void CopyFiles(string source, string dest)
+        private static async void CopyFiles(string source, string dest)
         {
             var i = GetAllFiles(new DirectoryInfo(source));
             foreach (var item in i)
@@ -98,7 +98,7 @@ namespace TLib.IO
                 string u = CutString(source, item.FullName);
                 if (!FileEquals(source + u, dest + u))
                 {
-                    await UserIO.SafeCopy(source + u, dest + u);
+                    await TIO.SafeCopy(source + u, dest + u);
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace TLib.IO
         /// <param name="source"></param>
         /// <param name="dest"></param>
         /// <param name="backupStr">例:D:\temp\backup</param>
-        public static async void CutFiles(string source, string dest, string backupStr)
+        private static async void CutFiles(string source, string dest, string backupStr)
         {
             var i = GetAllFiles(new DirectoryInfo(dest));
             foreach (var item in i)
@@ -118,23 +118,17 @@ namespace TLib.IO
                 {
                     if (Directory.Exists(backupStr))
                     {
-                        string x = backupStr + "\\" + item.Name.Substring(0, item.Name.Length - item.Extension.Length) + TimeStamp() + item.Extension;
-                        await UserIO.SafeCopy(dest + u, x);
+                        string x = backupStr + "\\" + item.Name.Substring(0, item.Name.Length - item.Extension.Length) + TimeStamp.Now + item.Extension;
+                        await TIO.SafeCopy(dest + u, x);
                     }
                     else if (backupStr != "")
                     {
                         throw new ArgumentException("备份路径不存在");
                     }
-                    await UserIO.SafeDelete(dest + u);
+                    await TIO.SafeDelete(dest + u);
 
                 }
             }
-        }
-
-        public static string TimeStamp()
-        {
-            var t = DateTime.Now;
-            return string.Format("{0},{1},{2},{3},{4}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
         }
         /// <summary>
         /// 遍历文件夹
@@ -157,14 +151,14 @@ namespace TLib.IO
         /// <param name="strLittle"></param>
         /// <param name="strBig"></param>
         /// <returns></returns>
-        public static string CutString(string strLittle, string strBig) { return strBig.Substring(strLittle.Length); }
+        private static string CutString(string strLittle, string strBig) { return strBig.Substring(strLittle.Length); }
         /// <summary>
         /// 剥离DirectoryInfos,获取相对路径
         /// </summary>
         /// <param name="source"></param>
         /// <param name="infos"></param>
         /// <returns></returns>
-        public static List<string> GetRelativePath(string source, List<DirectoryInfo> infos)
+        private static List<string> GetRelativePath(string source, List<DirectoryInfo> infos)
         {
             List<string> list = new List<string>();
             foreach (var item in infos)
@@ -179,7 +173,7 @@ namespace TLib.IO
         /// <param name="file1"></param>
         /// <param name="file2"></param>
         /// <returns></returns>
-        public static bool FileEquals(string file1, string file2)
+        private static bool FileEquals(string file1, string file2)
         {
             FileInfo f1 = new FileInfo(file1);
             FileInfo f2 = new FileInfo(file2);
