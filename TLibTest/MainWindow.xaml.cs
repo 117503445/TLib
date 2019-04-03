@@ -16,7 +16,7 @@ namespace TLibTest
             InitializeComponent();
             //SerializableDictionary<string, object>.CustomTypes.Add(value.GetType());
             //SerializableDictionary<string, object>.CustomTypes.Add(typeof(List<People>));
-            Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_list_People) });
+            //Serializer serializer = new Serializer(this, "1.xml", new List<string>() { nameof(Var_list_People) });
             KeyboardHook keyboardHook = new KeyboardHook();
             keyboardHook.KeyDown += (s, e) =>
             {
@@ -72,6 +72,17 @@ namespace TLibTest
             List<int> list = new List<int> { 5, 3, 6, 4, 76, 43 };
             
             list.ForEach(i => Console.WriteLine(i));
+        }
+
+        private void BtnDebug4_Click(object sender, RoutedEventArgs e)
+        {
+            TLib.Net.Udp.TUdpServer server = new TLib.Net.Udp.TUdpServer();
+            server.UDP_ReceiveString += (o, s) =>
+            {
+                Console.WriteLine(s);
+            };
+            var client = new TLib.Net.Udp.TUdpClient();
+            client.Send("127.0.0.1", 800, "Hello");
         }
     }
 

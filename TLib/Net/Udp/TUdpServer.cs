@@ -53,9 +53,9 @@ namespace TLib.Net.Udp
                 while (true)
                 {
                     var result = await Udp.ReceiveAsync();
-                    UDP_Received(this, result);
-                    UDP_ReceiveBytes(this, result.Buffer);
-                    UDP_ReceiveString(this, Encoding.Default.GetString(result.Buffer));
+                    UDP_Received?.Invoke(this, result);
+                    UDP_ReceiveBytes?.Invoke(this, result.Buffer);
+                    UDP_ReceiveString?.Invoke(this, Encoding.Default.GetString(result.Buffer));
                 }
             });
         }

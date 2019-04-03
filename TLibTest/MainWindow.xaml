@@ -7,10 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Name="BtnDebug0" Content="BtnDebug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug0_Click"/>
-        <Button Name="BtnDebug1" Content="BtnDebug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug1_Click" Margin="0,57,0,0"/>
-        <Button Name="BtnDebug2" Content="BtnDebug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug2_Click" Margin="0,128,0,0"/>
-        <Button Name="BtnDebug3" Content="BtnDebug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug3_Click" Margin="0,200,0,0"/>
+        <Button Name="BtnDebug0" Content="BtnDebug0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug0_Click"/>
+        <Button Name="BtnDebug1" Content="BtnDebug1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug1_Click" Margin="0,57,0,0"/>
+        <Button Name="BtnDebug2" Content="BtnDebug2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug2_Click" Margin="0,128,0,0"/>
+        <Button Name="BtnDebug3" Content="BtnDebug3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug3_Click" Margin="0,200,0,0"/>
+        <Button Name="BtnDebug4" Content="BtnDebug4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug4_Click" Margin="0,200,0,0"/>
 
     </Grid>
 </Window>

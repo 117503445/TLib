@@ -13,12 +13,8 @@ namespace UnitTest
             TLib.Net.Udp.TUdpServer server = new TLib.Net.Udp.TUdpServer();
             server.UDP_ReceiveString += (s, e) =>
             {
-                
-                System.Console.WriteLine(e);
-                if (e == "Hello")
-                {
-                    Assert.Fail();
-                }
+                var b = e.Equals("Hello");
+                Assert.IsTrue(!b);
             };
             var client = new TLib.Net.Udp.TUdpClient();
             client.Send("127.0.0.1", 800, "Hello");
