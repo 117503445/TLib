@@ -57,6 +57,8 @@
     <Compile Include="IO\SyncDir.cs" />
     <Compile Include="IO\UsbCopyer.cs" />
     <Compile Include="IO\TIO.cs" />
+    <Compile Include="Net\Udp\TUdpClient.cs" />
+    <Compile Include="Net\Udp\TUdpServer.cs" />
     <Compile Include="Software\Logger.cs" />
     <Compile Include="Software\TimeStamp.cs" />
     <Compile Include="UI\WPF_MessageBox\PgMessageDefault.xaml.cs">
