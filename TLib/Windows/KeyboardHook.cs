@@ -52,8 +52,8 @@ namespace TLib.Windows
         {
             KeyboardHookAPI.UnhookWindowsHookEx(hHook);
         }
-        public EventHandler<KeyboardHookEventArgs> KeyDown;
-        public EventHandler<KeyboardHookEventArgs> KeyUp;
+        public event EventHandler<KeyboardHookEventArgs> KeyDown;
+        public event EventHandler<KeyboardHookEventArgs> KeyUp;
         /// <summary>
         /// 获取键盘消息
         /// </summary>
