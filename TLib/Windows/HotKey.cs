@@ -19,7 +19,8 @@ namespace TLib.Windows
     {
         public event Action<HotKey> HotKeyPressed;
         private readonly int _id;
-        private bool _isKeyRegistered;
+        public bool IsKeyRegistered { get; set; }
+        
         readonly IntPtr _handle;
         public HotKey(ModifierKeys modifierKeys, Keys key, Window window)
             : this(modifierKeys, key, new WindowInteropHelper(window))
@@ -52,15 +53,15 @@ namespace TLib.Windows
         {
             if (Key == Keys.None)
                 return;
-            if (_isKeyRegistered)
+            if (IsKeyRegistered)
                 UnregisterHotKey();
-            _isKeyRegistered = HotKeyAPI.RegisterHotKey(_handle, _id, KeyModifier, Key);
-            if (!_isKeyRegistered)
+            IsKeyRegistered = HotKeyAPI.RegisterHotKey(_handle, _id, KeyModifier, Key);
+            if (!IsKeyRegistered)
                 throw new ApplicationException("Hotkey already in use");
         }
         public void UnregisterHotKey()
         {
-            _isKeyRegistered = !HotKeyAPI.UnregisterHotKey(_handle, _id);
+            IsKeyRegistered = !HotKeyAPI.UnregisterHotKey(_handle, _id);
         }
         public void Dispose()
         {

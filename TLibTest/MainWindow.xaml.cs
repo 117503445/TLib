@@ -84,6 +84,11 @@ namespace TLibTest
             var client = new TLib.Net.Udp.TUdpClient();
             client.Send("127.0.0.1", 800, "Hello");
         }
+
+        private void BtnDebug5_Click(object sender, RoutedEventArgs e)
+        {
+            KeyboardSimulation.Press(System.Windows.Input.Key.VolumeUp);
+        }
     }
 
 

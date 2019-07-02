@@ -509,7 +509,7 @@ namespace TLib.Windows
                                                                    Key.Right,
                                                                    Key.Apps,
                                                                    Key.RWin,
-                                                                   Key.LWin };
+                                                                   Key.LWin,Key.VolumeUp };
         // Note that there are no distinct values for the following keys:
         // numpad divide
         // numpad enter
