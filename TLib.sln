@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLib", "TLib\TLib.csproj", "{A9C54DC5-C5DC-4054-BF8F-5C2C38EE8AA4}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpTest", "FtpTest\FtpTest.csproj", "{ADFE9350-C97E-4530-AA8E-7652DD085C83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{52CD0B0C-1999-4B64-86CB-733FC65DC454}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{25CB51DC-FC3C-4754-8D19-9830288F2803}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{52CD0B0C-1999-4B64-86CB-733FC65DC454}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52CD0B0C-1999-4B64-86CB-733FC65DC454}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52CD0B0C-1999-4B64-86CB-733FC65DC454}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25CB51DC-FC3C-4754-8D19-9830288F2803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CB51DC-FC3C-4754-8D19-9830288F2803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CB51DC-FC3C-4754-8D19-9830288F2803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CB51DC-FC3C-4754-8D19-9830288F2803}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

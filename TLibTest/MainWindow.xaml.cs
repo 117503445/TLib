@@ -49,7 +49,7 @@ namespace TLibTest
         }
         private void BtnDebug1_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Write(233);
+            Logger.WriteLine(233);
             //Console.WriteLine(Var_int);
             //Console.WriteLine(Var_string);
             //Console.WriteLine(Var_bool);

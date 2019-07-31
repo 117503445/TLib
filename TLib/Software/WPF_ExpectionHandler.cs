@@ -33,14 +33,14 @@ namespace TLib.Software
             {
                 if (e.ExceptionObject is Exception exception)
                 {
-                    Logger.WriteException(exception, false, "试图恢复非UI异常");
+                    Logger.WriteException(exception, "试图恢复非UI异常");
                     ExpectionCatched?.Invoke(null, exception);
                 }
 
             }
             catch (Exception)
             {
-                Logger.Write("Error,不可恢复的非UI异常", "Bad");
+                Logger.WriteLine("Error,不可恢复的非UI异常");
                 await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", Btn2text: "确认");
             }
         }
@@ -48,13 +48,13 @@ namespace TLib.Software
         {
             try
             {
-                Logger.WriteException(e.Exception, false, "试图恢复UI异常");
+                Logger.WriteException(e.Exception, "试图恢复UI异常");
                 e.Handled = true;
                 ExpectionCatched?.Invoke(null, e.Exception);
             }
             catch (Exception)
             {
-                Logger.Write("Error,不可恢复的UI异常", "Bad");
+                Logger.WriteLine("Error,不可恢复的UI异常", "Bad");
                 await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", Btn2text: "确认");
             }
         }
