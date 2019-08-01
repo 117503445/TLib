@@ -10,17 +10,7 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            Logger.WriteLine("Hello World");
-            try
-            {
-                int a = 0;
-                int b = 1 / a;
-            }
-            catch (Exception ex)
-            {
-
-                Logger.WriteException(ex);
-            }
+            Logger.WriteLine("Hello World","File/F/1.txt");
             Console.Read();
         }
     }

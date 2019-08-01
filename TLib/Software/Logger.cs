@@ -45,6 +45,10 @@ namespace TLib.Software
         /// <param name="s"></param>
         private static void AppendWithTimeAndNewLine(string path, string s)
         {
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(new FileInfo(path).DirectoryName);
+            }
             File.AppendAllText(path, AddTimeAndNewLine(s));
         }
         /// <summary>
@@ -101,6 +105,12 @@ namespace TLib.Software
                     exception
                 };
             }
+
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(new FileInfo(path).DirectoryName);
+            }
+
             File.WriteAllText(path, JsonConvert.SerializeObject(exs,Formatting.Indented));
         }
         /// <summary>
