@@ -10,7 +10,17 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            Logger.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            Logger.WriteLine("Hello World");
+            try
+            {
+                int a = 0;
+                int b = 1 / a;
+            }
+            catch (Exception ex)
+            {
+
+                Logger.WriteException(ex);
+            }
             Console.Read();
         }
     }
