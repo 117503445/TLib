@@ -11,10 +11,16 @@ namespace TLib.Software
     /// </summary>
     public static class Logger
     {
+        /// <summary>
+        /// 默认的Log路径 Log.txt
+        /// </summary>
         public static string LogPath = "log.txt";
+        /// <summary>
+        /// 默认的错误Log路径 err.json
+        /// </summary>
         public static string ErrPath = "err.json";
         /// <summary>
-        /// Like "2019-07-31 16:57:50"
+        /// 返回当前时间,Like "2019-07-31 16:57:50"的字符串
         /// </summary>
         private static string Time
         {
@@ -24,7 +30,7 @@ namespace TLib.Software
             }
         }
         /// <summary>
-        /// 增加时间和换行
+        /// 给字符串增加时间和换行
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -32,10 +38,20 @@ namespace TLib.Software
         {
             return $"{Time}\t{s}{Environment.NewLine}";
         }
-        private static void AppendWithTime(string path, string s)
+        /// <summary>
+        /// 给字符串增加时间和换行后追加到指定路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="s"></param>
+        private static void AppendWithTimeAndNewLine(string path, string s)
         {
             File.AppendAllText(path, AddTimeAndNewLine(s));
         }
+        /// <summary>
+        /// 输出普通的日志到 LogPath(默认),自动增加时间和换行
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="path"></param>
         public static void WriteLine(object o = null, string path = "")
         {
             if (path == "")
@@ -49,8 +65,14 @@ namespace TLib.Software
                 s = o.ToString();
             }
 
-            AppendWithTime(path, s);
+            AppendWithTimeAndNewLine(path, s);
         }
+        /// <summary>
+        /// Json序列化 exception 到 ErrPath(默认),自动增加时间和换行
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="userMessage"></param>
+        /// <param name="path"></param>
         public static void WriteException(Exception ex, string userMessage = "", string path = "")
         {
 
@@ -95,11 +117,17 @@ namespace TLib.Software
             File.WriteAllText(path, "");
         }
     }
+    /// <summary>
+    /// 给 Exception 带上 时间和用户的注释
+    /// </summary>
     internal class LoggerException
     {
         public string Time;
         public string UserMessage;
         public Exception innerException;
+        /// <summary>
+        /// 给 Exception 带上 时间和用户的注释
+        /// </summary>
         public LoggerException(string message, Exception innerException)
         {
             UserMessage = message;
