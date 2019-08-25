@@ -49,21 +49,23 @@ namespace TLib.Net.Udp
         public static void StaticSend(string hostname, int port, byte[] message)
         {
             int p = 801;
-            bool b = false;
+            bool isSuccess = false;
             UdpClient udp = null;
-            while (!b)
+            while (!isSuccess)
             {
                 try
                 {
                     udp = new UdpClient(p);
-                    b = true;
+                    isSuccess = true;
                 }
                 catch (Exception)
                 {
                     p++;
                 }
             }
+            //为本地的 UdpClient 初始化寻找合适的空闲端口直至初始化成功
             udp.Send(message, message.Length, hostname, port);
+            udp.Dispose();
         }
     }
 }

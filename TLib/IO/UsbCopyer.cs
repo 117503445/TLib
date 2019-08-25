@@ -28,19 +28,15 @@ namespace TLib.IO
 
             }
         }
-
-        private bool isUseNotifyIcon = false;
-        public bool IsUseNotifyIcon { get => isUseNotifyIcon; set { isUseNotifyIcon = value; } }
-        private string dirBackup = "";
+        private readonly string dirBackup = "";
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dir_backup">备份路径,Exp:"D:/temp/"</param>
         /// <param name="isDirectCopy">直接拷贝模式</param>
-        /// <param name="isUseNotifyIcon">使用托盘</param>
-        public UsbCopyer(string dir_backup, bool isDirectCopy, bool isUseNotifyIcon)
+        public UsbCopyer(string dir_backup, bool isDirectCopy)
         {
-            this.dirBackup = dir_backup;
+            dirBackup = dir_backup;
             IsDirectCopy = isDirectCopy;
             if (IsDirectCopy)
             {

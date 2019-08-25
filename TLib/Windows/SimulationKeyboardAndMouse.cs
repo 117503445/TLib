@@ -450,8 +450,10 @@ namespace TLib.Windows
             PermissionSet permissions = new PermissionSet(PermissionState.Unrestricted);
             permissions.Demand();
 
-            SimulationAPI.INPUT ki = new SimulationAPI.INPUT();
-            ki.type = SimulationAPI.InputKeyboard;
+            SimulationAPI.INPUT ki = new SimulationAPI.INPUT
+            {
+                type = SimulationAPI.InputKeyboard
+            };
             ki.union.keyboardInput.wVk = (short)KeyInterop.VirtualKeyFromKey(key);
             ki.union.keyboardInput.wScan = (short)SimulationAPI.MapVirtualKey(ki.union.keyboardInput.wVk, 0);
 

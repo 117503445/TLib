@@ -27,10 +27,8 @@ namespace UnitTest
             int a = 2;
             int b = 3;
             TLib.CSharp.Swap(ref a, ref b);
-            if (a != 3 || b != 2)
-            {
-                Assert.Fail();
-            }
+            Assert.AreEqual(a, 3);
+            Assert.AreEqual(b, 2);
         }
         [TestMethod]
         public void RandomReserveTest()
