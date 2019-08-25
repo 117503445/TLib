@@ -12,6 +12,10 @@ namespace TLib.Software
     public static class Logger
     {
         /// <summary>
+        /// 是否向 Console 输出
+        /// </summary>
+        public static bool isOutputInConsole = false;
+        /// <summary>
         /// 默认的Log路径 Log.txt
         /// </summary>
         public static string LogPath = "log.txt";
@@ -68,7 +72,10 @@ namespace TLib.Software
             {
                 s = o.ToString();
             }
-
+            if (isOutputInConsole)
+            {
+                Console.WriteLine(s);
+            }
             AppendWithTimeAndNewLine(path, s);
         }
         /// <summary>
@@ -111,10 +118,10 @@ namespace TLib.Software
                 Directory.CreateDirectory(new FileInfo(path).DirectoryName);
             }
 
-            File.WriteAllText(path, JsonConvert.SerializeObject(exs,Formatting.Indented));
+            File.WriteAllText(path, JsonConvert.SerializeObject(exs, Formatting.Indented));
         }
         /// <summary>
-        /// 默认清空 logPath
+        /// 清空 Path 指定的日志文件,默认清空 logPath
         /// </summary>
         /// <param name="path"></param>
         public static void Clear(string path = "")

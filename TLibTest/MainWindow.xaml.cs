@@ -22,7 +22,6 @@ namespace TLibTest
             {
                 Console.WriteLine(e.key);
             };
-            //nameof(Var_bool), nameof(D), nameof(Var_list_int),
         }
         public static int Var_int { get; set; } = 2;
         public static string Var_string { get; set; } = "Hello";
@@ -49,18 +48,7 @@ namespace TLibTest
         }
         private void BtnDebug1_Click(object sender, RoutedEventArgs e)
         {
-            Logger.WriteLine(233);
-            //Console.WriteLine(Var_int);
-            //Console.WriteLine(Var_string);
-            //Console.WriteLine(Var_bool);
-            //Var_list_int.ForEach((item) =>
-            //{
-            //    Console.WriteLine(item);
-            //});
-
             Console.WriteLine(Var_list_People[0].Age);
-
-            //Console.WriteLine(Var_people.Age);
         }
         private async void BtnDebug2_Click(object sender, RoutedEventArgs e)
         {
@@ -87,7 +75,8 @@ namespace TLibTest
 
         private void BtnDebug5_Click(object sender, RoutedEventArgs e)
         {
-            KeyboardSimulation.Press(System.Windows.Input.Key.VolumeUp);
+            Mykey mykey = new Mykey();
+
         }
     }
 

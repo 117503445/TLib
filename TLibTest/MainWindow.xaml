@@ -12,6 +12,6 @@
         <Button Name="BtnDebug2" Content="BtnDebug2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug2_Click" Margin="0,128,0,0"/>
         <Button Name="BtnDebug3" Content="BtnDebug3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug3_Click" Margin="0,200,0,0"/>
         <Button Name="BtnDebug4" Content="BtnDebug4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnDebug4_Click" Margin="0,200,0,0"/>
-        <Button Name="BtnDebug5" Content="BtnDebug5" Click="BtnDebug5_Click" Margin="10,248,676,104"></Button>
+        <Button Name="BtnDebug5" Content="BtnDebug5" Click="BtnDebug5_Click" Margin="0,253,711,136"></Button>
     </Grid>
 </Window>

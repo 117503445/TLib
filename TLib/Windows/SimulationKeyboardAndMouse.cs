@@ -369,7 +369,7 @@ namespace TLib.Windows
         {
             foreach (Key key in Enum.GetValues(typeof(Key)))
             {
-                if (key != Key.None && (System.Windows.Input.Keyboard.GetKeyStates(key) & KeyStates.Down) > 0)
+                if (key != Key.None && (Keyboard.GetKeyStates(key) & KeyStates.Down) > 0)
                 {
                     Release(key);
                 }

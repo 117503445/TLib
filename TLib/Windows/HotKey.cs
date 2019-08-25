@@ -20,7 +20,7 @@ namespace TLib.Windows
         public event Action<HotKey> HotKeyPressed;
         private readonly int _id;
         public bool IsKeyRegistered { get; set; }
-        
+
         readonly IntPtr _handle;
         public HotKey(ModifierKeys modifierKeys, Keys key, Window window)
             : this(modifierKeys, key, new WindowInteropHelper(window))
@@ -68,21 +68,21 @@ namespace TLib.Windows
             ComponentDispatcher.ThreadPreprocessMessage -= ThreadPreprocessMessageMethod;
             UnregisterHotKey();
         }
+        /// <summary>
+        /// 热键被按下时第一个触发的方法
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="handled"></param>
         private void ThreadPreprocessMessageMethod(ref MSG msg, ref bool handled)
         {
             if (!handled)
             {
-                if (msg.message == HotKeyAPI.WmHotKey
-                    && (int)(msg.wParam) == _id)
+                if (msg.message == HotKeyAPI.WmHotKey && (int)(msg.wParam) == _id)
                 {
-                    OnHotKeyPressed();
+                    HotKeyPressed?.Invoke(this);
                     handled = true;
                 }
             }
-        }
-        private void OnHotKeyPressed()
-        {
-            HotKeyPressed?.Invoke(this);
         }
     }
     public class HotKeyAPI
