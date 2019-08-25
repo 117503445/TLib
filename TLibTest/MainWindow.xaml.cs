@@ -58,7 +58,7 @@ namespace TLibTest
         private void BtnDebug3_Click(object sender, RoutedEventArgs e)
         {
             List<int> list = new List<int> { 5, 3, 6, 4, 76, 43 };
-            
+
             list.ForEach(i => Console.WriteLine(i));
         }
 
@@ -75,8 +75,13 @@ namespace TLibTest
 
         private void BtnDebug5_Click(object sender, RoutedEventArgs e)
         {
-            Mykey mykey = new Mykey();
+            HotKey hotKey = new HotKey(System.Windows.Input.ModifierKeys.Control, System.Windows.Input.Key.Q);
+            hotKey.HotKeyPressed += HotKey_HotKeyPressed;
+        }
 
+        private void HotKey_HotKeyPressed(HotKey obj)
+        {
+            Console.WriteLine(1);
         }
     }
 

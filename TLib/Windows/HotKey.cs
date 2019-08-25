@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -17,51 +17,60 @@ namespace TLib.Windows
     /// </summary>
     public sealed class HotKey : IDisposable
     {
+        /// <summary>
+        /// 热键被触发
+        /// </summary>
         public event Action<HotKey> HotKeyPressed;
+        /// <summary>
+        /// 标识 Hotkey
+        /// </summary>
         private readonly int _id;
         public bool IsKeyRegistered { get; set; }
-
-        readonly IntPtr _handle;
-        public HotKey(ModifierKeys modifierKeys, Keys key, Window window)
-            : this(modifierKeys, key, new WindowInteropHelper(window))
+        /// <summary>
+        /// 在对象初始化时注册热键
+        /// </summary>
+        /// <param name="modifierKeys"></param>
+        /// <param name="key"></param>
+        public HotKey(ModifierKeys modifierKeys, Key key)
         {
-            Contract.Requires(window != null);
-        }
-        public HotKey(ModifierKeys modifierKeys, Keys key, WindowInteropHelper window)
-            : this(modifierKeys, key, window.Handle)
-        {
-            Contract.Requires(window != null);
-        }
-        public HotKey(ModifierKeys modifierKeys, Keys key, IntPtr windowHandle)
-        {
-            Contract.Requires(modifierKeys != ModifierKeys.None || key != Keys.None);
-            Contract.Requires(windowHandle != IntPtr.Zero);
+            Contract.Requires(modifierKeys != ModifierKeys.None || key != Key.None);
             Key = key;
             KeyModifier = modifierKeys;
             _id = GetHashCode();
-            _handle = windowHandle;
             RegisterHotKey();
             ComponentDispatcher.ThreadPreprocessMessage += ThreadPreprocessMessageMethod;
         }
+
         ~HotKey()
         {
             Dispose();
         }
-        public Keys Key { get; private set; }
+        public Key Key { get; private set; }
         public ModifierKeys KeyModifier { get; private set; }
+        /// <summary>
+        /// 注册热键
+        /// </summary>
         public void RegisterHotKey()
         {
-            if (Key == Keys.None)
-                return;
+            //重新进行注册
             if (IsKeyRegistered)
+            {
                 UnregisterHotKey();
-            IsKeyRegistered = HotKeyAPI.RegisterHotKey(_handle, _id, KeyModifier, Key);
+            }
+            IsKeyRegistered = HotKeyAPI.RegisterHotKey(IntPtr.Zero, _id, KeyModifier, KeyInterop.VirtualKeyFromKey(Key));
+
+            //如果注册失败,说明热键已经被占用
             if (!IsKeyRegistered)
+            {
                 throw new ApplicationException("Hotkey already in use");
+            }
         }
+        /// <summary>
+        /// 取消注册
+        /// </summary>
         public void UnregisterHotKey()
         {
-            IsKeyRegistered = !HotKeyAPI.UnregisterHotKey(_handle, _id);
+            IsKeyRegistered = !HotKeyAPI.UnregisterHotKey(IntPtr.Zero, _id);
         }
         public void Dispose()
         {
@@ -87,9 +96,12 @@ namespace TLib.Windows
     }
     public class HotKeyAPI
     {
+        /// <summary>
+        /// 由热键触发的 Windows 消息
+        /// </summary>
         public const int WmHotKey = 0x0312;
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, ModifierKeys fsModifiers, Keys vk);
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, ModifierKeys fsModifiers, int vk);
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
     }
