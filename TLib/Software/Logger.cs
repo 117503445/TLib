@@ -15,7 +15,7 @@ namespace TLib.Software
         /// <summary>
         /// 返回当前时间,Like "2019-07-31 16:57:50"的字符串
         /// </summary>
-        private static string Time => DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        private static string Time => DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
 
         public static bool IsOutputInConsole { get; set; } = false;
         public static string LogPath { get; set; } = "log.txt";

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TLib.UI.WPF_MessageBox
+namespace TLib.UI.WpfMessageBox
 {
     /// <summary>
     /// PgMessageDefault.xaml 的交互逻辑

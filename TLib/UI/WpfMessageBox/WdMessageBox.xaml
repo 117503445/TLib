@@ -1,4 +1,4 @@
-﻿<Window x:Class="TLib.UI.WPF_MessageBox.WdMessageBox"
+﻿<Window x:Class="TLib.UI.WpfMessageBox.WdMessageBox"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -19,8 +19,8 @@
         </Grid.RowDefinitions>
 
         <Frame Name="FmMain" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" ></Frame>
-        <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Btn0" Width="50" Height="30" Click="Btn0_Click"></Button>
+        <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Btn2" Width="50" Height="30" Click="Btn2_Click"></Button>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Btn1" Width="50" Height="30" Click="Btn1_Click"></Button>
-        <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Btn2" Width="50" Height="30" Click="Btn2_Click"></Button>
+        <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Btn0" Width="50" Height="30" Click="Btn0_Click"></Button>
     </Grid>
 </Window>

@@ -12,23 +12,6 @@ namespace TLib.IO
     /// </summary>
     public static class SyncDir
     {
-        //private static string sourceStr;
-        //private static string destStr;
-        //private static string backupStr;
-
-        ///// <summary>
-        ///// 同步的文件夹对
-        ///// </summary>
-        ///// <param name="sourceStr">例:D:\temp\source</param>
-        ///// <param name="destStr"></param>
-        ///// <param name="backupStr"></param>
-        //public SyncDir()
-        //{
-        //    this.sourceStr = sourceStr;
-        //    this.destStr = destStr;
-        //    this.backupStr = backupStr;
-        //}
-
         /// <summary>
         /// 高效的进行文件夹同步
         /// </summary>

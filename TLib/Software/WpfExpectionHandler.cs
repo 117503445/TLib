@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using TLib.UI.WPF_MessageBox;
+using TLib.UI.WpfMessageBox;
 
 namespace TLib.Software
 {
@@ -36,7 +36,6 @@ namespace TLib.Software
                     Logger.WriteException(exception, "试图恢复非UI异常");
                     ExpectionCatched?.Invoke(null, exception);
                 }
-
             }
             catch (Exception)
             {
