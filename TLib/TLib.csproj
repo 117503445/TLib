@@ -79,7 +79,7 @@
     <Compile Include="UI\WpfMessageBox\WdMessageBox.xaml.cs">
       <DependentUpon>WdMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\KeyboardHookAPI.cs" />
+    <Compile Include="Windows\NativeMethods.cs" />
     <Compile Include="Windows\KeyboardHookStruct.cs" />
     <Compile Include="Windows\SimulationKeyboardAndMouse.cs" />
     <Compile Include="Windows\HotKey.cs" />

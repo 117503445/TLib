@@ -12,108 +12,6 @@ using Point = System.Drawing.Point;
 namespace TLib.Windows
 {
     /// <summary>
-    /// Native methods
-    /// </summary>
-    internal static class SimulationAPI
-    {
-        //User32 wrappers cover API's used for Mouse input
-        #region User32
-        // Two special bitmasks we define to be able to grab
-        // shift and character information out of a VKey.
-        internal const int VKeyShiftMask = 0x0100;
-        internal const int VKeyCharMask = 0x00FF;
-
-        // Various Win32 constants
-        internal const int KeyeventfExtendedkey = 0x0001;
-        internal const int KeyeventfKeyup = 0x0002;
-        internal const int KeyeventfScancode = 0x0008;
-
-        internal const int MouseeventfVirtualdesk = 0x4000;
-
-        internal const int SMXvirtualscreen = 76;
-        internal const int SMYvirtualscreen = 77;
-        internal const int SMCxvirtualscreen = 78;
-        internal const int SMCyvirtualscreen = 79;
-
-        internal const int XButton1 = 0x0001;
-        internal const int XButton2 = 0x0002;
-        internal const int WheelDelta = 120;
-
-        internal const int InputMouse = 0;
-        internal const int InputKeyboard = 1;
-
-        // Various Win32 data structures
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct INPUT
-        {
-            internal int type;
-            internal INPUTUNION union;
-        };
-
-        [StructLayout(LayoutKind.Explicit)]
-        internal struct INPUTUNION
-        {
-            [FieldOffset(0)]
-            internal MOUSEINPUT mouseInput;
-            [FieldOffset(0)]
-            internal KEYBDINPUT keyboardInput;
-        };
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct MOUSEINPUT
-        {
-            internal int dx;
-            internal int dy;
-            internal int mouseData;
-            internal int dwFlags;
-            internal int time;
-            internal IntPtr dwExtraInfo;
-        };
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct KEYBDINPUT
-        {
-            internal short wVk;
-            internal short wScan;
-            internal int dwFlags;
-            internal int time;
-            internal IntPtr dwExtraInfo;
-        };
-
-        [Flags]
-        internal enum SendMouseInputFlags
-        {
-            Move = 0x0001,
-            LeftDown = 0x0002,
-            LeftUp = 0x0004,
-            RightDown = 0x0008,
-            RightUp = 0x0010,
-            MiddleDown = 0x0020,
-            MiddleUp = 0x0040,
-            XDown = 0x0080,
-            XUp = 0x0100,
-            Wheel = 0x0800,
-            Absolute = 0x8000,
-        };
-
-        // Importing various Win32 APIs that we need for input
-        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern int GetSystemMetrics(int nIndex);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern int MapVirtualKey(int nVirtKey, int nMapType);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern int SendInput(int nInputs, ref INPUT mi, int cbSize);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern short VkKeyScan(char ch);
-
-        #endregion
-    }
-
-
-    /// <summary>
     /// Exposes a simple interface to common mouse operations, allowing the user to simulate mouse input.
     /// </summary>
     /// <example>The following code moves to screen coordinate 100,100 and left clicks.
@@ -155,19 +53,19 @@ namespace TLib.Windows
             switch (mouseButton)
             {
                 case MouseButton.Left:
-                    SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.LeftDown);
+                    SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.LeftDown);
                     break;
                 case MouseButton.Right:
-                    SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.RightDown);
+                    SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.RightDown);
                     break;
                 case MouseButton.Middle:
-                    SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.MiddleDown);
+                    SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.MiddleDown);
                     break;
                 case MouseButton.XButton1:
-                    SendMouseInput(0, 0, SimulationAPI.XButton1, SimulationAPI.SendMouseInputFlags.XDown);
+                    SendMouseInput(0, 0, NativeMethods.XButton1, NativeMethods.SendMouseInputFlags.XDown);
                     break;
                 case MouseButton.XButton2:
-                    SendMouseInput(0, 0, SimulationAPI.XButton2, SimulationAPI.SendMouseInputFlags.XDown);
+                    SendMouseInput(0, 0, NativeMethods.XButton2, NativeMethods.SendMouseInputFlags.XDown);
                     break;
                 default:
                     throw new InvalidOperationException("Unsupported MouseButton input.");
@@ -180,7 +78,7 @@ namespace TLib.Windows
         /// <param name="point">The screen coordinates to move to.</param>
         public static void MoveTo(Point point)
         {
-            SendMouseInput(point.X, point.Y, 0, SimulationAPI.SendMouseInputFlags.Move | SimulationAPI.SendMouseInputFlags.Absolute);
+            SendMouseInput(point.X, point.Y, 0, NativeMethods.SendMouseInputFlags.Move | NativeMethods.SendMouseInputFlags.Absolute);
         }
 
         /// <summary>
@@ -192,27 +90,27 @@ namespace TLib.Windows
 
             if (System.Windows.Input.Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.LeftUp);
+                SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.LeftUp);
             }
 
             if (System.Windows.Input.Mouse.MiddleButton == MouseButtonState.Pressed)
             {
-                SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.MiddleUp);
+                SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.MiddleUp);
             }
 
             if (System.Windows.Input.Mouse.RightButton == MouseButtonState.Pressed)
             {
-                SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.RightUp);
+                SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.RightUp);
             }
 
             if (System.Windows.Input.Mouse.XButton1 == MouseButtonState.Pressed)
             {
-                SendMouseInput(0, 0, SimulationAPI.XButton1, SimulationAPI.SendMouseInputFlags.XUp);
+                SendMouseInput(0, 0, NativeMethods.XButton1, NativeMethods.SendMouseInputFlags.XUp);
             }
 
             if (System.Windows.Input.Mouse.XButton2 == MouseButtonState.Pressed)
             {
-                SendMouseInput(0, 0, SimulationAPI.XButton2, SimulationAPI.SendMouseInputFlags.XUp);
+                SendMouseInput(0, 0, NativeMethods.XButton2, NativeMethods.SendMouseInputFlags.XUp);
             }
         }
 
@@ -222,9 +120,9 @@ namespace TLib.Windows
         /// <param name="lines">The number of lines to scroll. Use positive numbers to scroll up and negative numbers to scroll down.</param>
         public static void Scroll(double lines)
         {
-            int amount = (int)(SimulationAPI.WheelDelta * lines);
+            int amount = (int)(NativeMethods.WheelDelta * lines);
 
-            SendMouseInput(0, 0, amount, SimulationAPI.SendMouseInputFlags.Wheel);
+            SendMouseInput(0, 0, amount, NativeMethods.SendMouseInputFlags.Wheel);
         }
 
         /// <summary>
@@ -236,19 +134,19 @@ namespace TLib.Windows
             switch (mouseButton)
             {
                 case MouseButton.Left:
-                    SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.LeftUp);
+                    SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.LeftUp);
                     break;
                 case MouseButton.Right:
-                    SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.RightUp);
+                    SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.RightUp);
                     break;
                 case MouseButton.Middle:
-                    SendMouseInput(0, 0, 0, SimulationAPI.SendMouseInputFlags.MiddleUp);
+                    SendMouseInput(0, 0, 0, NativeMethods.SendMouseInputFlags.MiddleUp);
                     break;
                 case MouseButton.XButton1:
-                    SendMouseInput(0, 0, SimulationAPI.XButton1, SimulationAPI.SendMouseInputFlags.XUp);
+                    SendMouseInput(0, 0, NativeMethods.XButton1, NativeMethods.SendMouseInputFlags.XUp);
                     break;
                 case MouseButton.XButton2:
-                    SendMouseInput(0, 0, SimulationAPI.XButton2, SimulationAPI.SendMouseInputFlags.XUp);
+                    SendMouseInput(0, 0, NativeMethods.XButton2, NativeMethods.SendMouseInputFlags.XUp);
                     break;
                 default:
                     throw new InvalidOperationException("Unsupported MouseButton input.");
@@ -263,23 +161,23 @@ namespace TLib.Windows
         /// <param name="data">scroll wheel amount</param>
         /// <param name="flags">SendMouseInputFlags flags</param>
         [PermissionSet(SecurityAction.Assert, Name = "FullTrust")]
-        private static void SendMouseInput(int x, int y, int data, SimulationAPI.SendMouseInputFlags flags)
+        private static void SendMouseInput(int x, int y, int data, NativeMethods.SendMouseInputFlags flags)
         {
             PermissionSet permissions = new PermissionSet(PermissionState.Unrestricted);
             permissions.Demand();
 
             int intflags = (int)flags;
 
-            if ((intflags & (int)SimulationAPI.SendMouseInputFlags.Absolute) != 0)
+            if ((intflags & (int)NativeMethods.SendMouseInputFlags.Absolute) != 0)
             {
                 // Absolute position requires normalized coordinates.
                 NormalizeCoordinates(ref x, ref y);
-                intflags |= SimulationAPI.MouseeventfVirtualdesk;
+                intflags |= NativeMethods.MouseeventfVirtualdesk;
             }
 
-            SimulationAPI.INPUT mi = new SimulationAPI.INPUT
+            NativeMethods.INPUT mi = new NativeMethods.INPUT
             {
-                type = SimulationAPI.InputMouse
+                type = NativeMethods.InputMouse
             };
             mi.union.mouseInput.dx = x;
             mi.union.mouseInput.dy = y;
@@ -288,7 +186,7 @@ namespace TLib.Windows
             mi.union.mouseInput.time = 0;
             mi.union.mouseInput.dwExtraInfo = new IntPtr(0);
 
-            if (SimulationAPI.SendInput(1, ref mi, Marshal.SizeOf(mi)) == 0)
+            if (NativeMethods.SendInput(1, ref mi, Marshal.SizeOf(mi)) == 0)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
@@ -296,10 +194,10 @@ namespace TLib.Windows
 
         private static void NormalizeCoordinates(ref int x, ref int y)
         {
-            int vScreenWidth = SimulationAPI.GetSystemMetrics(SimulationAPI.SMCxvirtualscreen);
-            int vScreenHeight = SimulationAPI.GetSystemMetrics(SimulationAPI.SMCyvirtualscreen);
-            int vScreenLeft = SimulationAPI.GetSystemMetrics(SimulationAPI.SMXvirtualscreen);
-            int vScreenTop = SimulationAPI.GetSystemMetrics(SimulationAPI.SMYvirtualscreen);
+            int vScreenWidth = NativeMethods.GetSystemMetrics(NativeMethods.SMCxvirtualscreen);
+            int vScreenHeight = NativeMethods.GetSystemMetrics(NativeMethods.SMCyvirtualscreen);
+            int vScreenLeft = NativeMethods.GetSystemMetrics(NativeMethods.SMXvirtualscreen);
+            int vScreenTop = NativeMethods.GetSystemMetrics(NativeMethods.SMYvirtualscreen);
 
             // Absolute input requires that input is in 'normalized' coords - with the entire
             // desktop being (0,0)...(65536,65536). Need to convert input x,y coords to this
@@ -405,9 +303,9 @@ namespace TLib.Windows
                 // to go from the vKey key info into a System.Windows.Input.Key data structure. This work is
                 // necessary because Key doesn't distinguish between upper and lower case, so we have to wrap
                 // the key type inside a shift press/release if necessary.
-                int vKeyValue = SimulationAPI.VkKeyScan(c);
-                bool keyIsShifted = (vKeyValue & SimulationAPI.VKeyShiftMask) == SimulationAPI.VKeyShiftMask;
-                Key key = KeyInterop.KeyFromVirtualKey(vKeyValue & SimulationAPI.VKeyCharMask);
+                int vKeyValue = NativeMethods.VkKeyScan(c);
+                bool keyIsShifted = (vKeyValue & NativeMethods.VKeyShiftMask) == NativeMethods.VKeyShiftMask;
+                Key key = KeyInterop.KeyFromVirtualKey(vKeyValue & NativeMethods.VKeyCharMask);
 
                 if (keyIsShifted)
                 {
@@ -456,36 +354,36 @@ namespace TLib.Windows
             PermissionSet permissions = new PermissionSet(PermissionState.Unrestricted);
             permissions.Demand();
 
-            SimulationAPI.INPUT ki = new SimulationAPI.INPUT
+            NativeMethods.INPUT ki = new NativeMethods.INPUT
             {
-                type = SimulationAPI.InputKeyboard
+                type = NativeMethods.InputKeyboard
             };
             ki.union.keyboardInput.wVk = (short)KeyInterop.VirtualKeyFromKey(key);
-            ki.union.keyboardInput.wScan = (short)SimulationAPI.MapVirtualKey(ki.union.keyboardInput.wVk, 0);
+            ki.union.keyboardInput.wScan = (short)NativeMethods.MapVirtualKey(ki.union.keyboardInput.wVk, 0);
 
             int dwFlags = 0;
 
             if (ki.union.keyboardInput.wScan > 0)
             {
-                dwFlags |= SimulationAPI.KeyeventfScancode;
+                dwFlags |= NativeMethods.KeyeventfScancode;
             }
 
             if (!press)
             {
-                dwFlags |= SimulationAPI.KeyeventfKeyup;
+                dwFlags |= NativeMethods.KeyeventfKeyup;
             }
 
             ki.union.keyboardInput.dwFlags = dwFlags;
 
             if (ExtendedKeys.Contains(key))
             {
-                ki.union.keyboardInput.dwFlags |= SimulationAPI.KeyeventfExtendedkey;
+                ki.union.keyboardInput.dwFlags |= NativeMethods.KeyeventfExtendedkey;
             }
 
             ki.union.keyboardInput.time = 0;
             ki.union.keyboardInput.dwExtraInfo = new IntPtr(0);
 
-            if (SimulationAPI.SendInput(1, ref ki, Marshal.SizeOf(ki)) == 0)
+            if (NativeMethods.SendInput(1, ref ki, Marshal.SizeOf(ki)) == 0)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }

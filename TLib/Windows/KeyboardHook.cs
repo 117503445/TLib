@@ -17,7 +17,7 @@ namespace TLib.Windows
             get
             {
                 byte[] bs = new byte[256];
-                KeyboardHookAPI.GetKeyboardState(bs);
+                _ = NativeMethods.GetKeyboardState(bs);
                 bool result = (bs[0x14] == 1);
                 //Console.WriteLine("result="+result);
                 return result;
@@ -35,16 +35,16 @@ namespace TLib.Windows
             SetHook();
         }
         private int hHook;
-        KeyboardHookAPI.HookProc KeyboardHookDelegate;
+        NativeMethods.HookProc KeyboardHookDelegate;
         /// <summary>
         /// 手动安装键盘钩子
         /// </summary>
         public void SetHook()
         {
-            KeyboardHookDelegate = new KeyboardHookAPI.HookProc(KeyboardHookProc);
+            KeyboardHookDelegate = new NativeMethods.HookProc(KeyboardHookProc);
             ProcessModule cModule = Process.GetCurrentProcess().MainModule;
-            var mh = KeyboardHookAPI.GetModuleHandle(cModule.ModuleName);
-            hHook = KeyboardHookAPI.SetWindowsHookEx(KeyboardHookAPI.WHKEYBOARDLL, KeyboardHookDelegate, mh, 0);
+            var mh = NativeMethods.GetModuleHandle(cModule.ModuleName);
+            hHook = NativeMethods.SetWindowsHookEx(NativeMethods.WHKEYBOARDLL, KeyboardHookDelegate, mh, 0);
             GCHandle.Alloc(KeyboardHookDelegate);
         }
         /// <summary>
@@ -52,7 +52,7 @@ namespace TLib.Windows
         /// </summary>
         public void UnHook()
         {
-            KeyboardHookAPI.UnhookWindowsHookEx(hHook);
+            NativeMethods.UnhookWindowsHookEx(hHook);
         }
         /// <summary>
         /// 案件按下
@@ -77,19 +77,19 @@ namespace TLib.Windows
                 KeyboardHookStruct KeyDataFromHook = (KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyboardHookStruct));
                 int keyData = KeyDataFromHook.VkCode;
                 //WM_KEYDOWN和WM_SYSKEYDOWN消息，将会引发OnKeyDownEvent事件
-                if ((wParam == KeyboardHookAPI.WMKEYDOWN || wParam == KeyboardHookAPI.WMSYSKEYDOWN))
+                if ((wParam == NativeMethods.WMKEYDOWN || wParam == NativeMethods.WMSYSKEYDOWN))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
                     KeyDown?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
                 //WM_KEYUP和WM_SYSKEYUP消息，将引发OnKeyUpEvent事件 
-                if ((wParam == KeyboardHookAPI.WMKEYUP || wParam == KeyboardHookAPI.WMSYSKEYUP))
+                if ((wParam == NativeMethods.WMKEYUP || wParam == NativeMethods.WMSYSKEYUP))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
                     KeyUp?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
             }
-            return IsHoldKey ? -1 : KeyboardHookAPI.CallNextHookEx(hHook, nCode, wParam, lParam);
+            return IsHoldKey ? -1 : NativeMethods.CallNextHookEx(hHook, nCode, wParam, lParam);
         }
     }
     public class KeyboardHookEventArgs : EventArgs
