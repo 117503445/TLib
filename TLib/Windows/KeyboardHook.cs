@@ -9,6 +9,9 @@ namespace TLib.Windows
     /// </summary>
     public class KeyboardHook
     {
+        /// <summary>
+        /// 获得当前的大写锁定状态
+        /// </summary>
         private static bool CapsLockStatus
         {
             get
@@ -21,7 +24,7 @@ namespace TLib.Windows
             }
         }
         /// <summary>
-        /// 是否拦截键盘
+        /// 是否拦截键盘消息
         /// </summary>
         public bool IsHoldKey { get; set; } = false;
         /// <summary>
@@ -31,7 +34,7 @@ namespace TLib.Windows
         {
             SetHook();
         }
-        int hHook;
+        private int hHook;
         KeyboardHookAPI.HookProc KeyboardHookDelegate;
         /// <summary>
         /// 手动安装键盘钩子
@@ -51,7 +54,13 @@ namespace TLib.Windows
         {
             KeyboardHookAPI.UnhookWindowsHookEx(hHook);
         }
+        /// <summary>
+        /// 案件按下
+        /// </summary>
         public event EventHandler<KeyboardHookEventArgs> KeyDown;
+        /// <summary>
+        /// 按键弹起
+        /// </summary>
         public event EventHandler<KeyboardHookEventArgs> KeyUp;
         /// <summary>
         /// 获取键盘消息
@@ -85,13 +94,20 @@ namespace TLib.Windows
     }
     public class KeyboardHookEventArgs : EventArgs
     {
+        /// <summary>
+        /// 当前为大写锁定时 CapsLockStatus 为 false,否则为 True
+        /// </summary>
         public bool CapsLockStatus { get; set; } = false;
         public Key Key { get; set; }
 
-        public KeyboardHookEventArgs(Key key, bool CapsLockStatus) { this.Key = key; this.CapsLockStatus = CapsLockStatus; }
+        public KeyboardHookEventArgs(Key key, bool CapsLockStatus)
+        {
+            Key = key;
+            this.CapsLockStatus = CapsLockStatus;
+        }
         public override string ToString()
         {
-            return $"{ Key.ToString()}{(CapsLockStatus ? 1 : 0)}{1}{Environment.NewLine}";
+            return $"{Key.ToString()}{(CapsLockStatus ? 1 : 0)}{1}{Environment.NewLine}";
         }
     }
     public class KeyboardHookAPI

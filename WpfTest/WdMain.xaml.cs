@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TLib.UI.WpfMessageBox;
+using TLib.Windows;
+
 namespace WpfTest
 {
     /// <summary>
@@ -59,11 +61,20 @@ namespace WpfTest
                     var result = await WdMessageBox.Display("消息", "消息", "OK");
                     Console.WriteLine(result);
                     break;
+                case 1:
+                    KeyboardHook keyboardHook = new KeyboardHook();
+                    keyboardHook.KeyDown += KeyboardHook_KeyDown;
+                    break;
                 default:
                     Console.WriteLine("未提供测试方法");
                     break;
             }
         }
 
+        private void KeyboardHook_KeyDown(object sender, KeyboardHookEventArgs e)
+        {
+            Console.WriteLine(e.Key);
+            Console.WriteLine(e.CapsLockStatus);
+        }
     }
 }
