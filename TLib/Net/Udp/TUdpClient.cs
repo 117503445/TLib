@@ -31,6 +31,10 @@ namespace TLib.Net.Udp
         }
         public void Send(int localPort, string hostname, int port, byte[] message)
         {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
             if (Udp == null)
             {
                 Udp = new UdpClient(localPort);

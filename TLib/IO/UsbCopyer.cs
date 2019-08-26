@@ -54,7 +54,7 @@ namespace TLib.IO
         /// </summary>
         /// <param name="dirSource">源文件夹路径</param>
         /// <param name="dirDestination">目标文件夹路径</param>
-        private void CopyUSB(string dirSource, string dirDestination)
+        private static void CopyUSB(string dirSource, string dirDestination)
         {
             Task.Run(() =>
             {

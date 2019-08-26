@@ -74,8 +74,8 @@ namespace TLib.Windows
             // 如果该消息被丢弃（nCode<0
             if (nCode >= 0)
             {
-                KeyboardHookAPI.KeyboardHookStruct KeyDataFromHook = (KeyboardHookAPI.KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyboardHookAPI.KeyboardHookStruct));
-                int keyData = KeyDataFromHook.vkCode;
+                KeyboardHookStruct KeyDataFromHook = (KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyboardHookStruct));
+                int keyData = KeyDataFromHook.VkCode;
                 //WM_KEYDOWN和WM_SYSKEYDOWN消息，将会引发OnKeyDownEvent事件
                 if ((wParam == KeyboardHookAPI.WMKEYDOWN || wParam == KeyboardHookAPI.WMSYSKEYDOWN))
                 {
@@ -110,6 +110,16 @@ namespace TLib.Windows
             return $"{Key.ToString()}{(CapsLockStatus ? 1 : 0)}{1}{Environment.NewLine}";
         }
     }
+    [StructLayout(LayoutKind.Sequential)] //声明键盘钩子的封送结构类型
+    public class KeyboardHookStruct
+    {
+        public int ScanCode { get; set; } //表示硬件扫描码
+        public int Flags { get; set; }
+        public int Time { get; set; }
+        public int DwExtraInfo { get; set; }
+
+        public int VkCode { get; set; }
+    }
     public class KeyboardHookAPI
     {
         public const int WMKEYDOWN = 0x100;
@@ -117,15 +127,7 @@ namespace TLib.Windows
         public const int WMSYSKEYDOWN = 0x104;
         public const int WMSYSKEYUP = 0x105;
         public const int WHKEYBOARDLL = 13;
-        [StructLayout(LayoutKind.Sequential)] //声明键盘钩子的封送结构类型
-        public class KeyboardHookStruct
-        {
-            public int vkCode; //表示一个在1到254间的虚似键盘码 
-            public int scanCode; //表示硬件扫描码
-            public int flags;
-            public int time;
-            public int dwExtraInfo;
-        }
+
         public delegate int HookProc(int nCode, Int32 wParam, IntPtr lParam);
         //安装钩子的函数 
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]

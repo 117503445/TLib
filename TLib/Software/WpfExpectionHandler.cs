@@ -24,6 +24,14 @@ namespace TLib.Software
         /// <param name="appDomain"></param>
         public static void HandleExpection(Application app, AppDomain appDomain)
         {
+            if (app == null)
+            {
+                throw new ArgumentNullException(nameof(app));
+            }
+            if (appDomain == null)
+            {
+                throw new ArgumentNullException(nameof(appDomain));
+            }
             app.DispatcherUnhandledException += App_DispatcherUnhandledException;
             appDomain.UnhandledException += AppDomain_UnhandledException;
         }
@@ -40,7 +48,7 @@ namespace TLib.Software
             catch (Exception)
             {
                 Logger.WriteLine("Error,不可恢复的非UI异常");
-                await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", Btn2text: "确认");
+                await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", "确认").ConfigureAwait(false);
             }
         }
         private static async void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -54,7 +62,7 @@ namespace TLib.Software
             catch (Exception)
             {
                 Logger.WriteLine("Error,不可恢复的UI异常", "Bad");
-                await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", Btn2text: "确认");
+                await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", "确认").ConfigureAwait(false);
             }
         }
     }

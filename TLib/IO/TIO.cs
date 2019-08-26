@@ -32,51 +32,36 @@ namespace TLib.IO
                     }
                 }
                 //获得源文件下所有文件
-                try
-                {
-                    List<string> files = new List<string>(Directory.GetFiles(sourcePath));
-                    files.ForEach(c =>
-                    {
-                        string destFile = Path.Combine(new string[] { destPath, Path.GetFileName(c) });
-                        try
-                        {
-                            File.Copy(c, destFile, true);//覆盖模式
-                        }
-                        catch (Exception)
-                        {
-                        }
 
-                    });
-                    //获得源文件下所有目录文件
-                    List<string> folders = new List<string>(Directory.GetDirectories(sourcePath));
-                    foreach (var item in folders)
+                List<string> files = new List<string>(Directory.GetFiles(sourcePath));
+                files.ForEach(c =>
+                {
+                    string destFile = Path.Combine(new string[] { destPath, Path.GetFileName(c) });
+                    File.Copy(c, destFile, true);//覆盖模式
+                });
+                //获得源文件下所有目录文件
+                List<string> folders = new List<string>(Directory.GetDirectories(sourcePath));
+                foreach (var item in folders)
+                {
+                    Console.WriteLine(item);
+                }
+                folders.ForEach(c =>
+                {
+                    string destDir = Path.Combine(new string[] { destPath, Path.GetFileName(c) });
+                    //采用递归的方法实现
+                    try
                     {
-                        Console.WriteLine(item);
+                        CopyFolder(c, destDir);
                     }
-                    folders.ForEach(c =>
+                    catch (Exception ex)
                     {
-                        string destDir = Path.Combine(new string[] { destPath, Path.GetFileName(c) });
-                        //采用递归的方法实现
-                        try
-                        {
-                            CopyFolder(c, destDir);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                            //throw;
-                        }
-
-                    });
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
+                        Console.WriteLine(ex.Message);
+                    }
+                });
             }
             else
             {
-                throw new DirectoryNotFoundException("源目录不存在！");
+                throw new DirectoryNotFoundException(sourcePath);
             }
         }
 
@@ -93,7 +78,7 @@ namespace TLib.IO
             if (!File.Exists(sourceFilePath))
             {
 #if DEBUG
-                throw new ArgumentException("原路径不存在");
+                throw new DirectoryNotFoundException(sourceFilePath);
 #endif
             }
             bool isSuccess = false;
@@ -133,7 +118,7 @@ namespace TLib.IO
             if (!File.Exists(path))
             {
 #if DEBUG
-                throw new ArgumentException("原路径不存在");
+                throw new DirectoryNotFoundException(path);
 #endif
             }
             bool isSuccess = false;

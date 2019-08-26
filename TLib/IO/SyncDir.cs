@@ -19,8 +19,7 @@ namespace TLib.IO
         {
             if (!Directory.Exists(dirSource))
             {
-                throw new ArgumentException("源路径不存在");
-
+                throw new DirectoryNotFoundException(dirSource);
             }
             if (!Directory.Exists(dirDest))
             {
@@ -106,7 +105,7 @@ namespace TLib.IO
                     }
                     else if (string.IsNullOrEmpty(backupStr))
                     {
-                        throw new ArgumentException("备份路径不存在");
+                        throw new DirectoryNotFoundException(backupStr);
                     }
                     await TIO.SafeDelete(dest + u).ConfigureAwait(false);
 
@@ -120,6 +119,10 @@ namespace TLib.IO
         /// <returns></returns>
         public static List<DirectoryInfo> GetAllDirs(DirectoryInfo info)
         {
+            if (info == null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
             return info.GetDirectories("*", SearchOption.AllDirectories).ToList();
         }
         /// <summary>
@@ -129,7 +132,10 @@ namespace TLib.IO
         /// <returns></returns>
         public static List<FileInfo> GetAllFiles(DirectoryInfo info)
         {
-
+            if (info == null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
             return info.GetFiles("*", SearchOption.AllDirectories).ToList();
         }
         /// <summary>

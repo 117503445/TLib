@@ -394,6 +394,10 @@ namespace TLib.Windows
         /// <param name="text">The text to type.</param>
         public static void Type(string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
             foreach (char c in text)
             {
                 // We get the vKey value for the character via a Win32 API. We then use bit masks to pull the
