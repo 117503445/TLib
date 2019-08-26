@@ -76,6 +76,7 @@ namespace TLib.Windows
         {
             ComponentDispatcher.ThreadPreprocessMessage -= ThreadPreprocessMessageMethod;
             UnregisterHotKey();
+            GC.SuppressFinalize(this);
         }
         /// <summary>
         /// 热键被按下时第一个触发的方法
