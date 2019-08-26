@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-
+using TLib;
+using TLib.Net.Udp;
 namespace UnitTest
 {
     [TestClass]
@@ -8,15 +9,38 @@ namespace UnitTest
     {
 
         [TestMethod]
+        public void RandomReservedTest()
+        {
+            var listA = new List<int>();
+            var listB = new List<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                listA.Add(i);
+                listB.Add(i);
+            }
+            CsharpHelper.RandomReserve(ref listA);
+            bool equal = true;
+            for (int i = 0; i < listA.Count; i++)
+            {
+                if (listA[i] != listB[i])
+                {
+                    equal = false;
+                    break;
+                }
+            }
+            Assert.IsFalse(equal);
+        }
+
+        [TestMethod]
         public void UdpTest()
         {
-            TLib.Net.Udp.TUdpServer server = new TLib.Net.Udp.TUdpServer();
+            TUdpServer server = new TUdpServer();
             server.UdpReceiveString += (s, e) =>
             {
                 var b = e.Equals("Hello");
                 Assert.IsTrue(!b);
             };
-            var client = new TLib.Net.Udp.TUdpClient();
+            var client = new TUdpClient();
             client.Send("127.0.0.1", 800, "Hello");
             System.Threading.Thread.Sleep(100);
         }
@@ -26,20 +50,9 @@ namespace UnitTest
         {
             int a = 2;
             int b = 3;
-            TLib.CsharpHelper.Swap(ref a, ref b);
+            CsharpHelper.Swap(ref a, ref b);
             Assert.AreEqual(a, 3);
             Assert.AreEqual(b, 2);
-        }
-        [TestMethod]
-        public void RandomReserveTest()
-        {
-            List<int> list = new List<int> { 5, 3, 6, 4, 76, 43 };
-            List<int> list2 = new List<int> { 5, 3, 6, 4, 76, 43 };
-            TLib.CsharpHelper.RandomReserve(ref list);
-            if (list.Equals(list2))
-            {
-                Assert.Fail();
-            }
         }
     }
 }
