@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("TLib")]
-[assembly: AssemblyDescription("t117503445's library")]
+[assembly: AssemblyDescription("t117503445's C# Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("117503445")]
 [assembly: AssemblyProduct("TLib")]
-[assembly: AssemblyCopyright("Copyleft © 117503445 2018")]
+[assembly: AssemblyCopyright("CopyLeft © 117503445 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
