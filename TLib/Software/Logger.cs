@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
 
@@ -12,27 +13,14 @@ namespace TLib.Software
     public static class Logger
     {
         /// <summary>
-        /// 是否向 Console 输出
-        /// </summary>
-        public static bool isOutputInConsole = false;
-        /// <summary>
-        /// 默认的Log路径 Log.txt
-        /// </summary>
-        public static string LogPath = "log.txt";
-        /// <summary>
-        /// 默认的错误Log路径 err.json
-        /// </summary>
-        public static string ErrPath = "err.json";
-        /// <summary>
         /// 返回当前时间,Like "2019-07-31 16:57:50"的字符串
         /// </summary>
-        private static string Time
-        {
-            get
-            {
-                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            }
-        }
+        private static string Time => DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        public static bool IsOutputInConsole { get; set; } = false;
+        public static string LogPath { get; set; } = "log.txt";
+        public static string ErrPath { get; set; } = "err.json";
+
         /// <summary>
         /// 给字符串增加时间和换行
         /// </summary>
@@ -60,9 +48,9 @@ namespace TLib.Software
         /// </summary>
         /// <param name="o"></param>
         /// <param name="path"></param>
-        public static void WriteLine(object o = null, string path = "")
+        public static void WriteLine(object o = null, string path = null)
         {
-            if (path == "")
+            if (string.IsNullOrEmpty(path))
             {
                 path = LogPath;
             }
@@ -72,7 +60,7 @@ namespace TLib.Software
             {
                 s = o.ToString();
             }
-            if (isOutputInConsole)
+            if (IsOutputInConsole)
             {
                 Console.WriteLine(s);
             }
@@ -84,10 +72,9 @@ namespace TLib.Software
         /// <param name="ex"></param>
         /// <param name="userMessage"></param>
         /// <param name="path"></param>
-        public static void WriteException(Exception ex, string userMessage = "", string path = "")
+        public static void WriteException(Exception ex, string userMessage = "", string path = null)
         {
-
-            if (path == "")
+            if (string.IsNullOrEmpty(path))
             {
                 path = ErrPath;
             }
@@ -124,9 +111,9 @@ namespace TLib.Software
         /// 清空 Path 指定的日志文件,默认清空 logPath
         /// </summary>
         /// <param name="path"></param>
-        public static void Clear(string path = "")
+        public static void Clear(string path = null)
         {
-            if (path == "")
+            if (string.IsNullOrEmpty(path))
             {
                 path = LogPath;
             }
@@ -149,7 +136,7 @@ namespace TLib.Software
         {
             UserMessage = message;
             this.innerException = innerException;
-            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
         }
     }
 }

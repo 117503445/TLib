@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using static TLib.IO.UsbCopyer.UsbWatcher;
 
 namespace TLib.IO
 {
@@ -32,11 +31,11 @@ namespace TLib.IO
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dir_backup">备份路径,Exp:"D:/temp/"</param>
+        /// <param name="dirBackup">备份路径,Exp:"D:/temp/"</param>
         /// <param name="isDirectCopy">直接拷贝模式</param>
-        public UsbCopyer(string dir_backup, bool isDirectCopy)
+        public UsbCopyer(string dirBackup, bool isDirectCopy)
         {
-            dirBackup = dir_backup;
+            this.dirBackup = dirBackup;
             IsDirectCopy = isDirectCopy;
             if (IsDirectCopy)
             {
@@ -64,8 +63,7 @@ namespace TLib.IO
                 {
                     Console.WriteLine("Coying:HackDrive={0},Path={1}", dirSource, dirDestination + timestamp);
                     TIO.CopyFolder(dirSource, dirDestination + timestamp);
-                        //SyncDir.Sync(dirSource,dirDestination);
-                    }
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
@@ -78,30 +76,32 @@ namespace TLib.IO
         {
             CopyUSB(hackDrive, dirBackup);
         }
-        public class UsbWatcher
+
+    }
+    public class UsbDiskEnterEventArgs : EventArgs
+    {
+        public DriveInfo Drive;
+        public UsbDiskEnterEventArgs(DriveInfo drive) { Drive = drive; Console.WriteLine("UsbDiskEnter:{0}", drive); }
+    }
+    public class UsbWatcher
+    {
+
+        private DriveInfo[] lastDrives = DriveInfo.GetDrives();
+        public UsbWatcher()
         {
-            public class UsbDiskEnterEventArgs : EventArgs
+            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+        public event EventHandler<UsbDiskEnterEventArgs> UsbDiskEnter;
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            var s = DriveInfo.GetDrives();
+            if (s.Length > lastDrives.Length && s.Last().DriveType == DriveType.Removable)
             {
-                public DriveInfo Drive;
-                public UsbDiskEnterEventArgs(DriveInfo drive) { Drive = drive; Console.WriteLine("UsbDiskEnter:{0}", drive); }
+                UsbDiskEnter(sender, new UsbDiskEnterEventArgs(s.Last()));
             }
-            private DriveInfo[] lastDrives = DriveInfo.GetDrives();
-            public UsbWatcher()
-            {
-                DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-                timer.Tick += Timer_Tick;
-                timer.Start();
-            }
-            public event EventHandler<UsbDiskEnterEventArgs> UsbDiskEnter;
-            private void Timer_Tick(object sender, EventArgs e)
-            {
-                var s = DriveInfo.GetDrives();
-                if (s.Length > lastDrives.Length && s.Last().DriveType == DriveType.Removable)
-                {
-                    UsbDiskEnter(sender, new UsbDiskEnterEventArgs(s.Last()));
-                }
-                lastDrives = s;
-            }
+            lastDrives = s;
         }
     }
 }

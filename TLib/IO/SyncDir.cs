@@ -32,21 +32,21 @@ namespace TLib.IO
         /// <summary>
         /// 高效的进行文件夹同步
         /// </summary>
-        public static void Sync(string dir_source, string dir_dest, string dir_backup = "")
+        public static void Sync(string dirSource, string dirDest, string dirBackup = "")
         {
-            if (!Directory.Exists(dir_source))
+            if (!Directory.Exists(dirSource))
             {
                 throw new ArgumentException("源路径不存在");
 
             }
-            if (!Directory.Exists(dir_dest))
+            if (!Directory.Exists(dirDest))
             {
-                Directory.CreateDirectory(dir_dest);
+                Directory.CreateDirectory(dirDest);
             }
-            BuildDirs(dir_dest, GetRelativePath(dir_source, GetAllDirs(new DirectoryInfo(dir_source))));
-            CutDirs(dir_source, dir_dest, GetRelativePath(dir_dest, GetAllDirs(new DirectoryInfo(dir_dest))));
-            CopyFiles(dir_source, dir_dest);
-            CutFiles(dir_source, dir_dest, dir_backup);
+            BuildDirs(dirDest, GetRelativePath(dirSource, GetAllDirs(new DirectoryInfo(dirSource))));
+            CutDirs(dirSource, dirDest, GetRelativePath(dirDest, GetAllDirs(new DirectoryInfo(dirDest))));
+            CopyFiles(dirSource, dirDest);
+            CutFiles(dirSource, dirDest, dirBackup);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace TLib.IO
                 string u = CutString(source, item.FullName);
                 if (!FileEquals(source + u, dest + u))
                 {
-                    await TIO.SafeCopy(source + u, dest + u);
+                    await TIO.SafeCopy(source + u, dest + u).ConfigureAwait(false);
                 }
             }
         }
@@ -119,13 +119,13 @@ namespace TLib.IO
                     if (Directory.Exists(backupStr))
                     {
                         string x = backupStr + "\\" + item.Name.Substring(0, item.Name.Length - item.Extension.Length) + TimeStamp.Now + item.Extension;
-                        await TIO.SafeCopy(dest + u, x);
+                        await TIO.SafeCopy(dest + u, x).ConfigureAwait(false);
                     }
                     else if (backupStr != "")
                     {
                         throw new ArgumentException("备份路径不存在");
                     }
-                    await TIO.SafeDelete(dest + u);
+                    await TIO.SafeDelete(dest + u).ConfigureAwait(false);
 
                 }
             }
@@ -144,7 +144,11 @@ namespace TLib.IO
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public static List<FileInfo> GetAllFiles(DirectoryInfo info) { return info.GetFiles("*", SearchOption.AllDirectories).ToList(); }
+        public static List<FileInfo> GetAllFiles(DirectoryInfo info)
+        {
+
+            return info.GetFiles("*", SearchOption.AllDirectories).ToList();
+        }
         /// <summary>
         /// 字符串相减以得到相对路径.EXP:strLittle="a",strBig="ab",return b
         /// </summary>

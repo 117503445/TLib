@@ -14,14 +14,14 @@ namespace TLib.Software
         {
             get
             {
-                return standardFormatDatetime(DateTime.Now.ToLocalTime());
+                return StandardFormatDatetime(DateTime.Now.ToLocalTime());
             }
         }
         /// <summary>
         /// 返回yyyy-mm-dd-hh-mm-ss-misd格式的时间
         /// </summary>
         /// <returns></returns>
-        public static string standardFormatDatetime(DateTime dateTime)
+        public static string StandardFormatDatetime(DateTime dateTime)
         {
             var d = dateTime;
             return $"{d.Year}-{d.Month}-{d.Day}_{d.Hour}-{d.Minute}-{d.Second}-{d.Millisecond}";

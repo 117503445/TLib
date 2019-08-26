@@ -11,7 +11,7 @@ namespace TLib.Software
     /// <summary>
     /// WPF程序的异常处理
     /// </summary>
-    public static class WPF_ExpectionHandler
+    public static class WpfExpectionHandler
     {
         /// <summary>
         /// 对捕获的异常进行额外处理

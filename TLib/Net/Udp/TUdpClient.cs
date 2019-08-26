@@ -48,6 +48,10 @@ namespace TLib.Net.Udp
         }
         public static void StaticSend(string hostname, int port, byte[] message)
         {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
             int p = 801;
             bool isSuccess = false;
             UdpClient udp = null;

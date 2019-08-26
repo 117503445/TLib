@@ -118,7 +118,7 @@ namespace TLib.IO
                 }
 
 
-            });
+            }).ConfigureAwait(false);
             return isSuccess;
         }
         /// <summary>
@@ -156,7 +156,7 @@ namespace TLib.IO
                         isSuccess = false;
                     }
                 }
-            });
+            }).ConfigureAwait(false);
             return isSuccess;
         }
     }

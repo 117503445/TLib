@@ -5,7 +5,7 @@ namespace TLib
     /// <summary>
     /// 提供一些基础的方法
     /// </summary>
-    public static class CSharp
+    public static class CsharpHelper
     {
         /// <summary>
         /// 泛型交换
@@ -20,15 +20,14 @@ namespace TLib
             object1 = tmp;
         }
         /// <summary>
-        /// 数组随机排序
+        /// 对数组进行随机排序
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         public static void RandomReserve<T>(ref T list) where T : System.Collections.IList, new()
         {
             Random random = new Random();
-            int n = 0,
-                r = list.Count - 1;
+            int n, r = list.Count - 1;
             int count = list.Count;
             int[] randomArray = new int[count];
             T newC = new T();

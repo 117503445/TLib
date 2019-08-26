@@ -11,7 +11,7 @@ namespace UnitTest
         public void UdpTest()
         {
             TLib.Net.Udp.TUdpServer server = new TLib.Net.Udp.TUdpServer();
-            server.UDP_ReceiveString += (s, e) =>
+            server.UdpReceiveString += (s, e) =>
             {
                 var b = e.Equals("Hello");
                 Assert.IsTrue(!b);
@@ -26,7 +26,7 @@ namespace UnitTest
         {
             int a = 2;
             int b = 3;
-            TLib.CSharp.Swap(ref a, ref b);
+            TLib.CsharpHelper.Swap(ref a, ref b);
             Assert.AreEqual(a, 3);
             Assert.AreEqual(b, 2);
         }
@@ -35,7 +35,7 @@ namespace UnitTest
         {
             List<int> list = new List<int> { 5, 3, 6, 4, 76, 43 };
             List<int> list2 = new List<int> { 5, 3, 6, 4, 76, 43 };
-            TLib.CSharp.RandomReserve(ref list);
+            TLib.CsharpHelper.RandomReserve(ref list);
             if (list.Equals(list2))
             {
                 Assert.Fail();

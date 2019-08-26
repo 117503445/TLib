@@ -32,9 +32,9 @@ namespace TLib.Net.Udp
         public int Sort { get; set; } = 800;
         private UdpClient Udp { get; set; }
 
-        public event EventHandler<string> UDP_ReceiveString;
-        public event EventHandler<UdpReceiveResult> UDP_Received;
-        public event EventHandler<byte[]> UDP_ReceiveBytes;
+        public event EventHandler<string> UdpReceiveString;
+        public event EventHandler<UdpReceiveResult> UdpReceived;
+        public event EventHandler<byte[]> UdpReceiveBytes;
 
         public void Start()
         {
@@ -52,10 +52,10 @@ namespace TLib.Net.Udp
             {
                 while (true)
                 {
-                    var result = await Udp.ReceiveAsync();
-                    UDP_Received?.Invoke(this, result);
-                    UDP_ReceiveBytes?.Invoke(this, result.Buffer);
-                    UDP_ReceiveString?.Invoke(this, Encoding.Default.GetString(result.Buffer));
+                    var result = await Udp.ReceiveAsync().ConfigureAwait(false);
+                    UdpReceived?.Invoke(this, result);
+                    UdpReceiveBytes?.Invoke(this, result.Buffer);
+                    UdpReceiveString?.Invoke(this, Encoding.Default.GetString(result.Buffer));
                 }
             });
         }
