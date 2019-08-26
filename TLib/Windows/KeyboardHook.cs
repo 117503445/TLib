@@ -110,38 +110,4 @@ namespace TLib.Windows
             return $"{Key.ToString()}{(CapsLockStatus ? 1 : 0)}{1}{Environment.NewLine}";
         }
     }
-    [StructLayout(LayoutKind.Sequential)] //声明键盘钩子的封送结构类型
-    public class KeyboardHookStruct
-    {
-        public int ScanCode { get; set; } //表示硬件扫描码
-        public int Flags { get; set; }
-        public int Time { get; set; }
-        public int DwExtraInfo { get; set; }
-
-        public int VkCode { get; set; }
-    }
-    public class KeyboardHookAPI
-    {
-        public const int WMKEYDOWN = 0x100;
-        public const int WMKEYUP = 0x101;
-        public const int WMSYSKEYDOWN = 0x104;
-        public const int WMSYSKEYUP = 0x105;
-        public const int WHKEYBOARDLL = 13;
-
-        public delegate int HookProc(int nCode, Int32 wParam, IntPtr lParam);
-        //安装钩子的函数 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern int SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
-        //卸下钩子的函数 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool UnhookWindowsHookEx(int idHook);
-        //下一个钩挂的函数 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern int CallNextHookEx(int idHook, int nCode, Int32 wParam, IntPtr lParam);
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern IntPtr GetModuleHandle(string lpModuleName);
-        //检测大小写锁定状态
-        [DllImport("user32.dll", EntryPoint = "GetKeyboardState")]
-        public static extern int GetKeyboardState(byte[] pbKeyState);
-    }
 }
