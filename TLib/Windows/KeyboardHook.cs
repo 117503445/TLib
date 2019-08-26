@@ -41,7 +41,7 @@ namespace TLib.Windows
             KeyboardHookDelegate = new KeyboardHookAPI.HookProc(KeyboardHookProc);
             ProcessModule cModule = Process.GetCurrentProcess().MainModule;
             var mh = KeyboardHookAPI.GetModuleHandle(cModule.ModuleName);
-            hHook = KeyboardHookAPI.SetWindowsHookEx(KeyboardHookAPI.WH_KEYBOARD_LL, KeyboardHookDelegate, mh, 0);
+            hHook = KeyboardHookAPI.SetWindowsHookEx(KeyboardHookAPI.WHKEYBOARDLL, KeyboardHookDelegate, mh, 0);
             GCHandle.Alloc(KeyboardHookDelegate);
         }
         /// <summary>
@@ -68,13 +68,13 @@ namespace TLib.Windows
                 KeyboardHookAPI.KeyboardHookStruct KeyDataFromHook = (KeyboardHookAPI.KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyboardHookAPI.KeyboardHookStruct));
                 int keyData = KeyDataFromHook.vkCode;
                 //WM_KEYDOWN和WM_SYSKEYDOWN消息，将会引发OnKeyDownEvent事件
-                if ((wParam == KeyboardHookAPI.WM_KEYDOWN || wParam == KeyboardHookAPI.WM_SYSKEYDOWN))
+                if ((wParam == KeyboardHookAPI.WMKEYDOWN || wParam == KeyboardHookAPI.WMSYSKEYDOWN))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
                     KeyDown?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
                 }
                 //WM_KEYUP和WM_SYSKEYUP消息，将引发OnKeyUpEvent事件 
-                if ((wParam == KeyboardHookAPI.WM_KEYUP || wParam == KeyboardHookAPI.WM_SYSKEYUP))
+                if ((wParam == KeyboardHookAPI.WMKEYUP || wParam == KeyboardHookAPI.WMSYSKEYUP))
                 {
                     Key key = KeyInterop.KeyFromVirtualKey(keyData);
                     KeyUp?.Invoke(this, new KeyboardHookEventArgs(key, CapsLockStatus));
@@ -95,11 +95,11 @@ namespace TLib.Windows
     }
     public class KeyboardHookAPI
     {
-        public const int WM_KEYDOWN = 0x100;
-        public const int WM_KEYUP = 0x101;
-        public const int WM_SYSKEYDOWN = 0x104;
-        public const int WM_SYSKEYUP = 0x105;
-        public const int WH_KEYBOARD_LL = 13;
+        public const int WMKEYDOWN = 0x100;
+        public const int WMKEYUP = 0x101;
+        public const int WMSYSKEYDOWN = 0x104;
+        public const int WMSYSKEYUP = 0x105;
+        public const int WHKEYBOARDLL = 13;
         [StructLayout(LayoutKind.Sequential)] //声明键盘钩子的封送结构类型
         public class KeyboardHookStruct
         {

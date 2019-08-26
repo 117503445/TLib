@@ -121,7 +121,7 @@ namespace TLib.IO
                         string x = backupStr + "\\" + item.Name.Substring(0, item.Name.Length - item.Extension.Length) + TimeStamp.Now + item.Extension;
                         await TIO.SafeCopy(dest + u, x).ConfigureAwait(false);
                     }
-                    else if (backupStr != "")
+                    else if (string.IsNullOrEmpty(backupStr))
                     {
                         throw new ArgumentException("备份路径不存在");
                     }
