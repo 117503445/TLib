@@ -85,12 +85,13 @@ namespace TLib.Windows
     }
     public class KeyboardHookEventArgs : EventArgs
     {
-        public bool CapsLockStatus = false;
-        public Key key;
-        public KeyboardHookEventArgs(Key key, bool CapsLockStatus) { this.key = key; this.CapsLockStatus = CapsLockStatus; }
+        public bool CapsLockStatus { get; set; } = false;
+        public Key Key { get; set; }
+
+        public KeyboardHookEventArgs(Key key, bool CapsLockStatus) { this.Key = key; this.CapsLockStatus = CapsLockStatus; }
         public override string ToString()
         {
-            return string.Format("{0};{1};{2}\r\n", key.ToString(), CapsLockStatus ? 1 : 0, 1);
+            return $"{ Key.ToString()}{(CapsLockStatus ? 1 : 0)}{1}{Environment.NewLine}";
         }
     }
     public class KeyboardHookAPI

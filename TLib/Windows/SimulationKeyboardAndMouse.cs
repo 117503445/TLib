@@ -277,8 +277,10 @@ namespace TLib.Windows
                 intflags |= SimulationAPI.MouseeventfVirtualdesk;
             }
 
-            SimulationAPI.INPUT mi = new SimulationAPI.INPUT();
-            mi.type = SimulationAPI.InputMouse;
+            SimulationAPI.INPUT mi = new SimulationAPI.INPUT
+            {
+                type = SimulationAPI.InputMouse
+            };
             mi.union.mouseInput.dx = x;
             mi.union.mouseInput.dy = y;
             mi.union.mouseInput.mouseData = data;

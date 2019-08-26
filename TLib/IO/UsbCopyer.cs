@@ -80,8 +80,8 @@ namespace TLib.IO
     }
     public class UsbDiskEnterEventArgs : EventArgs
     {
-        public DriveInfo Drive;
-        public UsbDiskEnterEventArgs(DriveInfo drive) { Drive = drive; Console.WriteLine("UsbDiskEnter:{0}", drive); }
+        public UsbDiskEnterEventArgs(DriveInfo drive) { Drive = drive; Console.WriteLine($"UsbDiskEnter:{drive}"); }
+        public DriveInfo Drive { get; }
     }
     public class UsbWatcher
     {
