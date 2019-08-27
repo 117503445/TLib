@@ -31,19 +31,7 @@ namespace UnitTest
             Assert.IsFalse(equal);
         }
 
-        [TestMethod]
-        public void UdpTest()
-        {
-            TUdpServer server = new TUdpServer();
-            server.UdpReceiveString += (s, e) =>
-            {
-                var b = e.Equals("Hello");
-                Assert.IsTrue(!b);
-            };
-            var client = new TUdpClient();
-            client.Send("127.0.0.1", 800, "Hello");
-            System.Threading.Thread.Sleep(100);
-        }
+
 
         [TestMethod]
         public void SwapTest()
