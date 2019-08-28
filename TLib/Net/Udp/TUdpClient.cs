@@ -56,24 +56,10 @@ namespace TLib.Net.Udp
             {
                 throw new ArgumentNullException(nameof(message));
             }
-            int p = 801;
-            bool isSuccess = false;
-            UdpClient udp = null;
-            while (!isSuccess)
+            using (UdpClient udp = new UdpClient())
             {
-                try
-                {
-                    udp = new UdpClient(p);
-                    isSuccess = true;
-                }
-                catch (Exception)
-                {
-                    p++;
-                }
+                udp.Send(message, message.Length, hostname, port);
             }
-            //为本地的 UdpClient 初始化寻找合适的空闲端口直至初始化成功
-            udp.Send(message, message.Length, hostname, port);
-            udp.Dispose();
         }
     }
 }

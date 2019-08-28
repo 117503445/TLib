@@ -49,14 +49,7 @@ namespace TLib.IO
                 {
                     string destDir = Path.Combine(new string[] { destPath, Path.GetFileName(c) });
                     //采用递归的方法实现
-                    try
-                    {
-                        CopyFolder(c, destDir);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                    CopyFolder(c, destDir);
                 });
             }
             else

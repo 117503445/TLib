@@ -92,7 +92,14 @@ namespace TLib.Software
                 exs = JsonConvert.DeserializeObject<List<LoggerException>>(json);
                 exs.Add(exception);
             }
-            catch (Exception)
+            catch (FileNotFoundException)
+            {
+                exs = new List<LoggerException>
+                {
+                    exception
+                };
+            }
+            catch (NullReferenceException)
             {
                 exs = new List<LoggerException>
                 {
