@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace TLib.IO
 {
-    public static class TIO
+    public static class TFile
     {
         /// <summary>
         /// 基于遍历的文件夹复制

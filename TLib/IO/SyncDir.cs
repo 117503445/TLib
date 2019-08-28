@@ -56,14 +56,7 @@ namespace TLib.IO
             {
                 if (!Directory.Exists(source + item))
                 {
-                    try
-                    {
-                        Directory.Delete(dest + item, true);
-                    }
-                    catch (Exception)
-                    {
-                    }
-
+                    Directory.Delete(dest + item, true);
                 }
             }
         }
@@ -80,7 +73,7 @@ namespace TLib.IO
                 string u = CutString(source, item.FullName);
                 if (!FileEquals(source + u, dest + u))
                 {
-                    await TIO.SafeCopy(source + u, dest + u).ConfigureAwait(false);
+                    await TFile.SafeCopy(source + u, dest + u).ConfigureAwait(false);
                 }
             }
         }
@@ -101,13 +94,13 @@ namespace TLib.IO
                     if (Directory.Exists(backupStr))
                     {
                         string x = backupStr + "\\" + item.Name.Substring(0, item.Name.Length - item.Extension.Length) + TimeStamp.Now + item.Extension;
-                        await TIO.SafeCopy(dest + u, x).ConfigureAwait(false);
+                        await TFile.SafeCopy(dest + u, x).ConfigureAwait(false);
                     }
                     else if (string.IsNullOrEmpty(backupStr))
                     {
                         throw new DirectoryNotFoundException(backupStr);
                     }
-                    await TIO.SafeDelete(dest + u).ConfigureAwait(false);
+                    await TFile.SafeDelete(dest + u).ConfigureAwait(false);
 
                 }
             }

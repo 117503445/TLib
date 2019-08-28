@@ -67,7 +67,9 @@
     <Compile Include="CsharpHelper.cs" />
     <Compile Include="IO\SyncDir.cs" />
     <Compile Include="IO\UsbCopyer.cs" />
-    <Compile Include="IO\TIO.cs" />
+    <Compile Include="IO\TFile.cs" />
+    <Compile Include="IO\UsbDiskEnterEventArgs.cs" />
+    <Compile Include="IO\UsbWatcher.cs" />
     <Compile Include="Net\Udp\TUdpClient.cs" />
     <Compile Include="Net\Udp\TUdpServer.cs" />
     <Compile Include="Software\Logger.cs" />

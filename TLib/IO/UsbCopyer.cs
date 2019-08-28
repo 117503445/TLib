@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace TLib.IO
 {
@@ -14,19 +13,9 @@ namespace TLib.IO
         /// <summary>
         /// 例:  "G:/",初始化为
         /// </summary>
-        private string hackDrive = DriveInfo.GetDrives().Last().DriveType == DriveType.Removable ? DriveInfo.GetDrives().Last().Name : "";
-        /// <summary>
-        /// 不点击托盘,直接进行copy
-        /// </summary>
-        private bool isDirectCopy = false;
-        public bool IsDirectCopy
-        {
-            get => isDirectCopy; set
-            {
-                isDirectCopy = value;
+        private string hackDrive = DriveInfo.GetDrives().Last().DriveType == DriveType.Removable ? DriveInfo.GetDrives().Last().Name : string.Empty;
 
-            }
-        }
+        public bool IsDirectCopy { get; set; } = false;
         private readonly string dirBackup = "";
         /// <summary>
         /// 
@@ -39,10 +28,9 @@ namespace TLib.IO
             IsDirectCopy = isDirectCopy;
             if (IsDirectCopy)
             {
-                UsbWatcher watcher = new UsbWatcher();
-                watcher.UsbDiskEnter += UsbDiskEnter;
+                UsbWatch.Start();
+                UsbWatch.UsbDiskEnter += UsbDiskEnter;
             }
-
         }
         private void UsbDiskEnter(object sender, UsbDiskEnterEventArgs e)
         {
@@ -59,16 +47,9 @@ namespace TLib.IO
             Task.Run(() =>
             {
                 string timestamp = Software.TimeStamp.Now;
-                try
-                {
-                    Console.WriteLine("Coying:HackDrive={0},Path={1}", dirSource, dirDestination + timestamp);
-                    TIO.CopyFolder(dirSource, dirDestination + timestamp);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-                Console.WriteLine("Copy:{0} finished", timestamp);
+                Console.WriteLine($"Coying:HackDrive={dirSource},Path={dirDestination + timestamp}");
+                TFile.CopyFolder(dirSource, dirDestination + timestamp);
+                Console.WriteLine($"Copy:{timestamp} finished");
             });
         }
 
@@ -77,31 +58,5 @@ namespace TLib.IO
             CopyUSB(hackDrive, dirBackup);
         }
 
-    }
-    public class UsbDiskEnterEventArgs : EventArgs
-    {
-        public UsbDiskEnterEventArgs(DriveInfo drive) { Drive = drive; Console.WriteLine($"UsbDiskEnter:{drive}"); }
-        public DriveInfo Drive { get; }
-    }
-    public class UsbWatcher
-    {
-
-        private DriveInfo[] lastDrives = DriveInfo.GetDrives();
-        public UsbWatcher()
-        {
-            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-            timer.Tick += Timer_Tick;
-            timer.Start();
-        }
-        public event EventHandler<UsbDiskEnterEventArgs> UsbDiskEnter;
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            var s = DriveInfo.GetDrives();
-            if (s.Length > lastDrives.Length && s.Last().DriveType == DriveType.Removable)
-            {
-                UsbDiskEnter(sender, new UsbDiskEnterEventArgs(s.Last()));
-            }
-            lastDrives = s;
-        }
     }
 }

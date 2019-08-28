@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace UnitTest
 {
     [TestClass]
-    public class TIOTest
+    public class TFileTest
     {
         [TestMethod]
         public void CopyFolderTest()
@@ -19,7 +19,7 @@ namespace UnitTest
             Directory.CreateDirectory("source/child");
             File.WriteAllText("source/child/1.txt", "");
 
-            TLib.IO.TIO.CopyFolder("source", "dest");
+            TLib.IO.TFile.CopyFolder("source", "dest");
 
             Assert.IsTrue(Directory.Exists("dest"));
             Assert.IsTrue(Directory.Exists("dest/child"));
