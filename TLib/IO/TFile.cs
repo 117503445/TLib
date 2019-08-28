@@ -85,7 +85,7 @@ namespace TLib.IO
                         isSuccess = true;
                         break;
                     }
-                    catch (Exception)
+                    catch (IOException)
                     {
                         Thread.Sleep(waitTime);
                     }
@@ -125,7 +125,7 @@ namespace TLib.IO
                         isSuccess = true;
                         break;
                     }
-                    catch (Exception)
+                    catch (IOException)
                     {
                         Thread.Sleep(waitTime);
                     }

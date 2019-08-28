@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -58,10 +59,13 @@ namespace TLib.Windows
             }
             IsKeyRegistered = NativeMethods.RegisterHotKey(IntPtr.Zero, _id, KeyModifier, KeyInterop.VirtualKeyFromKey(Key));
 
+
             //如果注册失败,说明热键已经被占用
             if (!IsKeyRegistered)
             {
+#pragma warning disable CA1303 // 请不要将文本作为本地化参数传递
                 throw new ApplicationException("Hotkey already in use");
+#pragma warning restore CA1303 // 请不要将文本作为本地化参数传递
             }
         }
         /// <summary>

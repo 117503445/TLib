@@ -45,7 +45,9 @@ namespace TLib.Software
                     ExpectionCatched?.Invoke(null, exception);
                 }
             }
+#pragma warning disable CA1031 // 不捕获常规异常类型
             catch (Exception)
+#pragma warning restore CA1031 // 不捕获常规异常类型
             {
                 Logger.WriteLine("Error,不可恢复的非UI异常");
                 await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", "确认").ConfigureAwait(false);
@@ -59,7 +61,9 @@ namespace TLib.Software
                 e.Handled = true;
                 ExpectionCatched?.Invoke(null, e.Exception);
             }
+#pragma warning disable CA1031 // 不捕获常规异常类型
             catch (Exception)
+#pragma warning restore CA1031 // 不捕获常规异常类型
             {
                 Logger.WriteLine("Error,不可恢复的UI异常", "Bad");
                 await WdMessageBox.Display("消息", "很遗憾,我们遇到了一个无法挽回的错误,程序即将关闭,希望联系开发人员以改善程序质量", "确认").ConfigureAwait(false);

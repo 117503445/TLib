@@ -68,7 +68,9 @@ namespace TLib.Windows
                     SendMouseInput(0, 0, NativeMethods.XButton2, NativeMethods.SendMouseInputFlags.XDown);
                     break;
                 default:
+#pragma warning disable CA1303 // 请不要将文本作为本地化参数传递
                     throw new InvalidOperationException("Unsupported MouseButton input.");
+#pragma warning restore CA1303 // 请不要将文本作为本地化参数传递
             }
         }
 
@@ -149,7 +151,9 @@ namespace TLib.Windows
                     SendMouseInput(0, 0, NativeMethods.XButton2, NativeMethods.SendMouseInputFlags.XUp);
                     break;
                 default:
+#pragma warning disable CA1303 // 请不要将文本作为本地化参数传递
                     throw new InvalidOperationException("Unsupported MouseButton input.");
+#pragma warning restore CA1303 // 请不要将文本作为本地化参数传递
             }
         }
 
