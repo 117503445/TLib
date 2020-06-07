@@ -12,10 +12,10 @@ namespace TLib.Net.Udp
     /// </summary>
     public class TUdpServer
     {
-        public TUdpServer(int sort = 800, bool running = true)
+        public TUdpServer(int port = 800, bool running = true)
         {
             Running = running;
-            Sort = sort;
+            Port = port;
             if (running)
             {
                 Start();
@@ -29,7 +29,7 @@ namespace TLib.Net.Udp
         /// <summary>
         /// 端口
         /// </summary>
-        public int Sort { get; set; } = 800;
+        public int Port { get; set; } = 800;
         private UdpClient Udp { get; set; }
 
         public event EventHandler<string> UdpReceiveString;
@@ -40,7 +40,7 @@ namespace TLib.Net.Udp
         {
             try
             {
-                Udp = new UdpClient(Sort);
+                Udp = new UdpClient(Port);
             }
             catch (Exception)
             {
